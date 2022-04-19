@@ -1,0 +1,115 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y parallel python3.10
+      - name: Run Lint Script
+        run: ./scripts/lint.sh
+
+
+  build:
+    name: ${{matrix.name}}
+    runs-on: ubuntu-22.04
+    env:
+      build_dir: cmake-build-ci
+      OPOSSUM_HEADLESS_SETUP: true
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: clangDebug
+            cc: clang
+            cxx: clang++
+            type: Debug
+
+          - name: gccDebug
+            cc: gcc
+            cxx: g++
+            type: Debug
+
+          - name: clangRelease
+            cc: clang
+            cxx: clang++
+            type: Release
+
+          - name: clangDebugTidy
+            cc: clang
+            cxx: clang++
+            type: Debug
+            build_options: -DCMAKE_UNITY_BUILD=ON -DCMAKE_CXX_CLANG_TIDY=clang-tidy
+
+          - name: clangDebugCoverage
+            cc: clang
+            cxx: clang++
+            type: Debug
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Install Dependencies
+        # The install script installs clang-15 and gcc-11. If you want to update the compiler versions, update them there.
+        run: |
+          ./install_dependencies.sh
+          sudo update-alternatives --config gcc
+          sudo update-alternatives --config clang
+          sudo update-alternatives --config clang++
+          sudo update-alternatives --config clang-tidy
+          sudo update-alternatives --config llvm-cov
+
+      - name: System Information
+        # Just ensure everything is set up correctly.
+        run: |
+          ${{matrix.cc}} --version
+          ${{matrix.cxx}} --version
+          clang-tidy --version
+          llvm-cov --version
+
+      - name: Setup CMake
+        run: cmake -B ${build_dir} -DCMAKE_C_COMPILER=${{matrix.cc}} -DCMAKE_CXX_COMPILER=${{matrix.cxx}} -DCMAKE_BUILD_TYPE=${{matrix.type}} ${{matrix.build_options}}
+
+      - name: Build the Library
+        if: matrix.name == 'clangDebugTidy'
+        run: make -C ${build_dir} opossum -j $(nproc) -k
+
+      - name: Build the Project
+        if: matrix.name != 'clangDebugTidy' && matrix.name != 'clangDebugCoverage'
+        run: make -C ${build_dir} -j $(nproc)
+
+      - name: Run Tests
+        if: matrix.name != 'clangDebugTidy' && matrix.name != 'clangDebugCoverage'
+        run: ${build_dir}/opossumTest
+
+      - name: Build and Run Tests for Coverage Report
+        if: matrix.name == 'clangDebugCoverage'
+        continue-on-error: true
+        run: |
+          make -C ${build_dir} opossumCoverage -j $(nproc)
+          ./${build_dir}/opossumCoverage
+
+      - name: Create Coverage Report
+        if: matrix.name == 'clangDebugCoverage'
+        # We cannot use ./scripts/coverage.sh directly because we need to explicitly tell gcovr to use the clang version.
+        run: gcovr -s -r . --exclude="(.*types*.|.*test*.|.*\.pb\.|third_party)" --gcov-executable "llvm-cov gcov"
