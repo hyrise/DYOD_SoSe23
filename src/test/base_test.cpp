@@ -37,19 +37,19 @@ BaseTest::Matrix BaseTest::_table_to_matrix(const Table& table) {
   // set values
   unsigned row_offset = 0;
   for (ChunkID chunk_id{0}; chunk_id < table.chunk_count(); chunk_id++) {
-    const Chunk& chunk = table.get_chunk(chunk_id);
+    const auto chunk = table.get_chunk(chunk_id);
 
     // an empty table's chunk might be missing actual segments
-    if (chunk.size() == 0) continue;
+    if (chunk->size() == 0) continue;
 
     for (ColumnID column_id{0}; column_id < table.column_count(); ++column_id) {
-      std::shared_ptr<AbstractSegment> segment = chunk.get_segment(column_id);
+      std::shared_ptr<AbstractSegment> segment = chunk->get_segment(column_id);
 
-      for (ChunkOffset chunk_offset = 0; chunk_offset < chunk.size(); ++chunk_offset) {
+      for (ChunkOffset chunk_offset = 0; chunk_offset < chunk->size(); ++chunk_offset) {
         matrix[row_offset + chunk_offset][column_id] = (*segment)[chunk_offset];
       }
     }
-    row_offset += chunk.size();
+    row_offset += chunk->size();
   }
 
   return matrix;

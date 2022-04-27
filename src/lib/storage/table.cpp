@@ -78,12 +78,12 @@ const std::string& Table::column_type(const ColumnID column_id) const {
   Fail("Implementation is missing.");
 }
 
-Chunk& Table::get_chunk(ChunkID chunk_id) {
+std::shared_ptr<Chunk> Table::get_chunk(ChunkID chunk_id) {
   // Implementation goes here
   Fail("Implementation is missing.");
 }
 
-const Chunk& Table::get_chunk(ChunkID chunk_id) const {
+std::shared_ptr<const Chunk> Table::get_chunk(ChunkID chunk_id) const {
   // Implementation goes here
   Fail("Implementation is missing.");
 }

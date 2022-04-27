@@ -37,8 +37,8 @@ class Table : private Noncopyable {
   ChunkID chunk_count() const;
 
   // Returns the chunk with the given id.
-  Chunk& get_chunk(const ChunkID chunk_id);
-  const Chunk& get_chunk(const ChunkID chunk_id) const;
+  std::shared_ptr<Chunk> get_chunk(const ChunkID chunk_id);
+  std::shared_ptr<const Chunk> get_chunk(const ChunkID chunk_id) const;
 
   // Returns a list of all column names.
   const std::vector<std::string>& column_names() const;
