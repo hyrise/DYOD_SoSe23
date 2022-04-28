@@ -67,9 +67,6 @@ class Table : private Noncopyable {
   // Creates a new chunk and appends it.
   void create_new_chunk();
 
-  // Compresses a ValueColumn into a DictionaryColumn.
-  void compress_chunk(const ChunkID chunk_id);
-
  protected:
   // Implementation goes here
 };
