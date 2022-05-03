@@ -88,4 +88,9 @@ std::shared_ptr<const Chunk> Table::get_chunk(ChunkID chunk_id) const {
   Fail("Implementation is missing.");
 }
 
+void Table::compress_chunk(const ChunkID chunk_id) {
+  // Implementation goes here
+  Fail("Implementation is missing.");
+}
+
 }  // namespace opossum
