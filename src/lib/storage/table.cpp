@@ -23,17 +23,20 @@ Table::Table(const ChunkOffset target_chunk_size) {
   Fail("Implementation is missing.");
 }
 
+void Table::add_column_definition(const std::string& name, const std::string& type) {
+  // Implementation goes here
+}
+
 void Table::add_column(const std::string& name, const std::string& type) {
   // Implementation goes here
   Fail("Implementation is missing.");
 }
 
-void Table::append(const std::vector<AllTypeVariant>& values) {
+void Table::create_new_chunk() {
   // Implementation goes here
-  Fail("Implementation is missing.");
 }
 
-void Table::create_new_chunk() {
+void Table::append(const std::vector<AllTypeVariant>& values) {
   // Implementation goes here
   Fail("Implementation is missing.");
 }
