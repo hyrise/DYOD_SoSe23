@@ -10,6 +10,11 @@ set(
     HYRISE_TEST_SOURCES
     ${SHARED_SOURCES}
     lib/all_type_variant_test.cpp
+    operators/get_table_test.cpp
+    operators/print_test.cpp
+    operators/table_scan_test.cpp
+    storage/dictionary_segment_test.cpp
+    storage/reference_segment_test.cpp 
     storage/chunk_test.cpp
     storage/dictionary_segment_test.cpp
     storage/storage_manager_test.cpp
