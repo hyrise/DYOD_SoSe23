@@ -24,8 +24,10 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/third_party/googletest/googletest/include
 
     ${PROJECT_SOURCE_DIR}/src/lib/
-    ${Boost_INCLUDE_DIRS}
+    SYSTEM PUBLIC ${Boost_INCLUDE_DIRS}
 )
+
+#target_include_directories(hyrise SYSTEM PUBLIC ${Boost_INCLUDE_DIRS})
 
 add_subdirectory(bin)
 add_subdirectory(lib)
