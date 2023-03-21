@@ -6,9 +6,7 @@ endif()
 
 add_definitions(-DHYRISE_DEBUG=${HYRISE_DEBUG})
 
-
-# This will be used by the DebugAssert macro to output
-# a file path relative to CMAKE_SOURCE_DIR
+# This will be used by the DebugAssert macro to output a file path relative to CMAKE_SOURCE_DIR.
 string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
 if (CMAKE_CXX_COMPILER_LAUNCHER)
     if (${CMAKE_CXX_COMPILER_LAUNCHER} STREQUAL "ccache")
@@ -17,7 +15,7 @@ if (CMAKE_CXX_COMPILER_LAUNCHER)
 endif()
 add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
 
-# Global flags and include directories
+# Global flags and include directories.
 add_compile_options(-std=c++1z -pthread -Wall -Wextra -pedantic -Werror -Wno-unused-parameter)
 
 include_directories(
@@ -26,8 +24,6 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/src/lib/
     SYSTEM PUBLIC ${Boost_INCLUDE_DIRS}
 )
-
-#target_include_directories(hyrise SYSTEM PUBLIC ${Boost_INCLUDE_DIRS})
 
 add_subdirectory(bin)
 add_subdirectory(lib)

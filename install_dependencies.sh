@@ -48,7 +48,7 @@ if echo $REPLY | grep -E '^[Yy]$' > /dev/null; then
             echo "Installing dependencies (this may take a while)..."
             if sudo apt-get update >/dev/null; then
                 boostall=$(apt-cache search --names-only '^libboost1.[0-9]+-all-dev$' | sort | tail -n 1 | cut -f1 -d' ')
-                sudo apt-get install --no-install-recommends -y build-essential clang-9 clang-format-9 clang-tidy-9 cmake gcovr parallel $boostall &
+                sudo apt-get install --no-install-recommends -y build-essential gcc-11 clang-15 clang-format-15 clang-tidy-15 llvm-15 cmake parallel python3-pip gcovr $boostall &
 
                 if ! git submodule update --jobs 5 --init --recursive; then
                     echo "Error during installation."
@@ -62,8 +62,14 @@ if echo $REPLY | grep -E '^[Yy]$' > /dev/null; then
                     exit 1
                 fi
 
-                sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9
-                sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-9 90 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-9 --slave /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-9 --slave /usr/bin/llvm-profdata llvm-profdata /usr/bin/llvm-profdata-9 --slave /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-9 --slave /usr/bin/clang-format clang-format /usr/bin/clang-format-9
+                sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11
+                # The Github Action does not like clang slaves.
+                sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 110
+                sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-15 110
+                sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-15 110
+                sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 110
+                sudo update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-15 110
+
             else
                 echo "Error during installation."
                 exit 1
