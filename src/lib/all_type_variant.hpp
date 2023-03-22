@@ -1,9 +1,5 @@
 #pragma once
 
-#include <cstdint>
-#include <string>
-#include <vector>
-
 #include <boost/hana/ext/boost/mpl/vector.hpp>
 #include <boost/hana/pair.hpp>
 #include <boost/hana/prepend.hpp>
@@ -18,6 +14,7 @@
 #include <boost/preprocessor/seq/for_each.hpp>
 #include <boost/preprocessor/seq/transform.hpp>
 
+#include "null_value.hpp"
 #include "types.hpp"
 
 namespace opossum {
@@ -36,6 +33,9 @@ static constexpr auto type_strings = hana::make_tuple("int",    "long",   "float
 // Extends to hana::make_tuple(hana::type_c<int32_t>, hana::type_c<int64_t>, ...);
 static constexpr auto types =
     hana::make_tuple(BOOST_PP_SEQ_ENUM(BOOST_PP_SEQ_TRANSFORM(EXPAND_TO_HANA_TYPE, _, data_types_macro)));
+
+// Prepends NullValue to tuple of types
+static constexpr auto types_including_null = hana::prepend(types, hana::type_c<NullValue>);
 
 /**
  * Holds pairs of all types and their respective string representation.
@@ -58,7 +58,7 @@ struct to_pair {
 static constexpr auto data_types = hana::transform(data_types_as_tuples, to_pair{});  // NOLINT
 
 // Converts tuple to mpl vector
-using TypesAsMplVector = decltype(hana::to<hana::ext::boost::mpl::vector_tag>(types));
+using TypesAsMplVector = decltype(hana::to<hana::ext::boost::mpl::vector_tag>(types_including_null));
 
 // Creates boost::variant from mpl vector
 using AllTypeVariant = typename boost::make_variant_over<detail::TypesAsMplVector>::type;
@@ -70,6 +70,20 @@ static constexpr auto data_types = detail::data_types;
 
 using AllTypeVariant = detail::AllTypeVariant;
 
+// Function to check if AllTypeVariant is NULL.
+inline bool variant_is_null(const AllTypeVariant& variant) {
+  return (variant.which() == 0);
+}
+
+/**
+ * Notes:
+ *   – Use this instead of AllTypeVariant{}, AllTypeVariant{NullValue{}}, NullValue{}, etc.
+ *     whenever a NULL value needs to be represented.
+ *   - Comparing any AllTypeVariant to NULL_VALUE returns false in accordance with the ternary logic
+ *   - Use variant_is_null() if you want to check if an AllTypeVariant is NULL.
+ */
+static const auto NULL_VALUE = AllTypeVariant{};
+
 /**
  * @defgroup Macros for explicitly instantiating template classes
  *
@@ -80,6 +94,13 @@ using AllTypeVariant = detail::AllTypeVariant;
  *
  * @{
  */
+
+#define EXPLICIT_DECLARATION(r, template_class, type) extern template class template_class<type>;
+
+// Explicitly declares the given template class for all types in DATA_TYPES (used in .hpp)
+#define EXPLICITLY_DECLARE_DATA_TYPES(template_class)                           \
+  BOOST_PP_SEQ_FOR_EACH(EXPLICIT_DECLARATION, template_class, data_types_macro) \
+  static_assert(true, "End call of macro with a semicolon")
 
 #define EXPLICIT_INSTANTIATION(r, template_class, type) template class template_class<type>;
 

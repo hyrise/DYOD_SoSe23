@@ -1,11 +1,7 @@
-#include <memory>
-
 #include "base_test.hpp"
-#include "gtest/gtest.h"
 
 #include "operators/get_table.hpp"
 #include "storage/storage_manager.hpp"
-#include "storage/table.hpp"
 
 namespace opossum {
 class OperatorsGetTableTest : public BaseTest {
@@ -28,7 +24,7 @@ TEST_F(OperatorsGetTableTest, GetOutput) {
 TEST_F(OperatorsGetTableTest, ThrowsUnknownTableName) {
   auto get_table_oper = std::make_shared<GetTable>("TableB");
 
-  EXPECT_THROW(get_table_oper->execute(), std::exception) << "Should throw unknown table name exception";
+  EXPECT_THROW(get_table_oper->execute(), std::logic_error) << "Should throw unknown table name exception";
 }
 
 }  // namespace opossum

@@ -1,12 +1,8 @@
-#include <memory>
-
 #include "base_test.hpp"
-#include "gtest/gtest.h"
 
-#include "../lib/resolve_type.hpp"
-#include "../lib/storage/abstract_segment.hpp"
-#include "../lib/storage/chunk.hpp"
-#include "../lib/types.hpp"
+#include "resolve_type.hpp"
+#include "storage/abstract_segment.hpp"
+#include "storage/chunk.hpp"
 
 namespace opossum {
 
@@ -25,8 +21,8 @@ class StorageChunkTest : public BaseTest {
   }
 
   Chunk chunk;
-  std::shared_ptr<AbstractSegment> int_value_segment = nullptr;
-  std::shared_ptr<AbstractSegment> string_value_segment = nullptr;
+  std::shared_ptr<ValueSegment<int32_t>> int_value_segment{};
+  std::shared_ptr<ValueSegment<std::string>> string_value_segment{};
 };
 
 TEST_F(StorageChunkTest, AddSegmentToChunk) {
@@ -42,9 +38,9 @@ TEST_F(StorageChunkTest, AddValuesToChunk) {
   chunk.append({2, "two"});
   EXPECT_EQ(chunk.size(), 4u);
 
-  if constexpr (HYRISE_DEBUG) {
-    EXPECT_THROW(chunk.append({}), std::exception);
-    EXPECT_THROW(chunk.append({4, "val", 3}), std::exception);
+  if constexpr (OPOSSUM_DEBUG) {
+    EXPECT_THROW(chunk.append({}), std::logic_error);
+    EXPECT_THROW(chunk.append({4, "val", 3}), std::logic_error);
     EXPECT_EQ(chunk.size(), 4u);
   }
 }

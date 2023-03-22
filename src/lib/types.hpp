@@ -38,9 +38,17 @@ namespace opossum {
 using ChunkOffset = uint32_t;
 using AttributeVectorWidth = uint8_t;
 
+constexpr ChunkOffset INVALID_CHUNK_OFFSET{std::numeric_limits<ChunkOffset>::max()};
+constexpr ChunkID INVALID_CHUNK_ID{std::numeric_limits<ChunkID::base_type>::max()};
+
 struct RowID {
   ChunkID chunk_id;
   ChunkOffset chunk_offset;
+
+  // Faster than row_id == NULL_ROW_ID, since we only compare the ChunkOffset.
+  bool is_null() const {
+    return chunk_offset == INVALID_CHUNK_OFFSET;
+  }
 
   // Joins need to use RowIDs as keys for maps.
   bool operator<(const RowID& rhs) const {
@@ -51,6 +59,15 @@ struct RowID {
     return std::tie(chunk_id, chunk_offset) == std::tie(rhs.chunk_id, rhs.chunk_offset);
   }
 };
+
+// Declaring one part of a RowID as invalid would suffice to represent NULL values. However, this way we add an extra
+// safety net which ensures that NULL values are handled correctly. E.g., getting a chunk with INVALID_CHUNK_ID
+// immediately crashes.
+constexpr RowID NULL_ROW_ID = RowID{INVALID_CHUNK_ID, INVALID_CHUNK_OFFSET};
+
+// Even though ValueIDs do not have to use the full width of ValueID (uint32_t), this will also work for smaller ValueID
+// types (uint8_t, uint16_t) since after a down-cast INVALID_VALUE_ID will look like their numeric_limit::max().
+constexpr ValueID INVALID_VALUE_ID{std::numeric_limits<ValueID::base_type>::max()};
 
 enum class ScanType { OpEquals, OpNotEquals, OpLessThan, OpLessThanEquals, OpGreaterThan, OpGreaterThanEquals };
 

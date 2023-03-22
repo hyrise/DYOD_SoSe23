@@ -3,7 +3,7 @@
    Comments should be used to explain the concept and usage of classes (in the hpp file) and the structure of the
    algorithms (in the implementation).
 2. Thou shalt program defensively. Use `Assert` wherever it makes sense, use `DebugAssert` in performance-critical parts
-   (e.g., within hot loops). Also, we do not handle exceptions in Hyrise. If an invalid state is reached, we crash
+   (e.g., within hot loops). Also, we do not handle exceptions in Opossum. If an invalid state is reached, we crash
    immediately. This makes debugging easier. An exception to this is user-facing code where we handle, e.g., typos in
    SQL queries.
 3. Thou shalt reflect on existing code. Just as your code is not perfect, neither is the code that people wrote before

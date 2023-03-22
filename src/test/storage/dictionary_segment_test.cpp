@@ -1,9 +1,7 @@
-#include <memory>
-#include <string>
-
 #include "base_test.hpp"
 
 #include "resolve_type.hpp"
+#include "storage/abstract_attribute_vector.hpp"
 #include "storage/abstract_segment.hpp"
 #include "storage/dictionary_segment.hpp"
 
@@ -11,8 +9,8 @@ namespace opossum {
 
 class StorageDictionarySegmentTest : public BaseTest {
  protected:
-  std::shared_ptr<ValueSegment<int32_t>> value_segment_int = std::make_shared<ValueSegment<int32_t>>();
-  std::shared_ptr<ValueSegment<std::string>> value_segment_str = std::make_shared<ValueSegment<std::string>>();
+  std::shared_ptr<ValueSegment<int32_t>> value_segment_int{std::make_shared<ValueSegment<int32_t>>()};
+  std::shared_ptr<ValueSegment<std::string>> value_segment_str{std::make_shared<ValueSegment<std::string>>(true)};
 };
 
 TEST_F(StorageDictionarySegmentTest, CompressSegmentString) {
@@ -22,27 +20,27 @@ TEST_F(StorageDictionarySegmentTest, CompressSegmentString) {
   value_segment_str->append("Steve");
   value_segment_str->append("Hasso");
   value_segment_str->append("Bill");
+  value_segment_str->append(NULL_VALUE);
 
-  std::shared_ptr<AbstractSegment> segment;
-  resolve_data_type("string", [&](auto type) {
-    using Type = typename decltype(type)::type;
-    segment = std::make_shared<DictionarySegment<Type>>(value_segment_str);
-  });
+  const auto dict_segment = std::make_shared<DictionarySegment<std::string>>(value_segment_str);
 
-  auto dict_segment = std::dynamic_pointer_cast<DictionarySegment<std::string>>(segment);
+  // Test attribute_vector size.
+  EXPECT_EQ(dict_segment->size(), 7u);
 
-  // Test attribute_vector size
-  EXPECT_EQ(dict_segment->size(), 6u);
-
-  // Test dictionary size (uniqueness)
+  // Test dictionary size (uniqueness).
   EXPECT_EQ(dict_segment->unique_values_count(), 4u);
 
-  // Test sorting
-  const auto dict = dict_segment->dictionary();
+  // Test sorting.
+  const auto& dict = dict_segment->dictionary();
   EXPECT_EQ(dict[0], "Alexander");
   EXPECT_EQ(dict[1], "Bill");
   EXPECT_EQ(dict[2], "Hasso");
   EXPECT_EQ(dict[3], "Steve");
+
+  // Test NULL value handling.
+  EXPECT_EQ(dict_segment->attribute_vector()->get(6), dict_segment->null_value_id());
+  EXPECT_EQ(dict_segment->get_typed_value(6), std::nullopt);
+  EXPECT_THROW(dict_segment->get(6), std::logic_error);
 }
 
 TEST_F(StorageDictionarySegmentTest, LowerUpperBound) {

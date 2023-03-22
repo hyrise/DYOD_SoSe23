@@ -1,10 +1,10 @@
 # Configure playground
 add_executable(
-    hyrisePlayground
+    opossumPlayground
 
     playground.cpp
 )
 target_link_libraries(
-    hyrisePlayground
-    hyrise
+    opossumPlayground
+    opossum
 )

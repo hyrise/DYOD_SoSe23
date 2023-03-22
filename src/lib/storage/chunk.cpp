@@ -1,15 +1,6 @@
-#include <iomanip>
-#include <iterator>
-#include <limits>
-#include <memory>
-#include <mutex>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include "abstract_segment.hpp"
 #include "chunk.hpp"
 
+#include "abstract_segment.hpp"
 #include "utils/assert.hpp"
 
 namespace opossum {
@@ -24,17 +15,17 @@ void Chunk::append(const std::vector<AllTypeVariant>& values) {
 
 std::shared_ptr<AbstractSegment> Chunk::get_segment(const ColumnID column_id) const {
   // Implementation goes here
-  return nullptr;
+  Fail("Implementation is missing.");
 }
 
 ColumnCount Chunk::column_count() const {
   // Implementation goes here
-  return ColumnCount{0};
+  Fail("Implementation is missing.");
 }
 
 ChunkOffset Chunk::size() const {
   // Implementation goes here
-  return 0;
+  Fail("Implementation is missing.");
 }
 
 }  // namespace opossum

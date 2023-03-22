@@ -1,10 +1,5 @@
 #include "storage_manager.hpp"
 
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
-
 #include "utils/assert.hpp"
 
 namespace opossum {
@@ -26,12 +21,12 @@ void StorageManager::drop_table(const std::string& name) {
 
 std::shared_ptr<Table> StorageManager::get_table(const std::string& name) const {
   // Implementation goes here
-  return nullptr;
+  Fail("Implementation is missing.");
 }
 
 bool StorageManager::has_table(const std::string& name) const {
   // Implementation goes here
-  return false;
+  Fail("Implementation is missing.");
 }
 
 std::vector<std::string> StorageManager::table_names() const {

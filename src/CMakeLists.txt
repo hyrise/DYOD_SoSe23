@@ -1,10 +1,10 @@
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    set(HYRISE_DEBUG 1)
+    set(OPOSSUM_DEBUG 1)
 else()
-    set(HYRISE_DEBUG 0)
+    set(OPOSSUM_DEBUG 0)
 endif()
 
-add_definitions(-DHYRISE_DEBUG=${HYRISE_DEBUG})
+add_definitions(-DOPOSSUM_DEBUG=${OPOSSUM_DEBUG})
 
 # This will be used by the DebugAssert macro to output a file path relative to CMAKE_SOURCE_DIR.
 string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
@@ -15,8 +15,8 @@ if (CMAKE_CXX_COMPILER_LAUNCHER)
 endif()
 add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
 
-# Global flags and include directories.
-add_compile_options(-std=c++1z -pthread -Wall -Wextra -pedantic -Werror -Wno-unused-parameter)
+# Global flags and include directories
+add_compile_options(-std=c++20 -pthread -Wall -Wextra -pedantic -Werror -Wno-unused-parameter)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/third_party/googletest/googletest/include

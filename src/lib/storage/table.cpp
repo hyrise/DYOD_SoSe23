@@ -1,33 +1,18 @@
 #include "table.hpp"
 
-#include <algorithm>
-#include <iomanip>
-#include <limits>
-#include <memory>
-#include <numeric>
-#include <string>
-#include <thread>
-#include <utility>
-#include <vector>
-
-#include "value_segment.hpp"
-
-#include "resolve_type.hpp"
-#include "types.hpp"
 #include "utils/assert.hpp"
 
 namespace opossum {
 
 Table::Table(const ChunkOffset target_chunk_size) {
   // Implementation goes here
-  Fail("Implementation is missing.");
 }
 
-void Table::add_column_definition(const std::string& name, const std::string& type) {
+void Table::add_column_definition(const std::string& name, const std::string& type, const bool nullable) {
   // Implementation goes here
 }
 
-void Table::add_column(const std::string& name, const std::string& type) {
+void Table::add_column(const std::string& name, const std::string& type, const bool nullable) {
   // Implementation goes here
   Fail("Implementation is missing.");
 }
@@ -43,27 +28,27 @@ void Table::append(const std::vector<AllTypeVariant>& values) {
 
 ColumnCount Table::column_count() const {
   // Implementation goes here
-  return ColumnCount{0};
+  Fail("Implementation is missing.");
 }
 
-ChunkOffset Table::row_count() const {
+uint64_t Table::row_count() const {
   // Implementation goes here
-  return 0;
+  Fail("Implementation is missing.");
 }
 
 ChunkID Table::chunk_count() const {
   // Implementation goes here
-  return ChunkID{0};
+  Fail("Implementation is missing.");
 }
 
 ColumnID Table::column_id_by_name(const std::string& column_name) const {
   // Implementation goes here
-  return ColumnID{0};
+  Fail("Implementation is missing.");
 }
 
 ChunkOffset Table::target_chunk_size() const {
   // Implementation goes here
-  return ChunkOffset{0};
+  Fail("Implementation is missing.");
 }
 
 const std::vector<std::string>& Table::column_names() const {
@@ -77,6 +62,11 @@ const std::string& Table::column_name(const ColumnID column_id) const {
 }
 
 const std::string& Table::column_type(const ColumnID column_id) const {
+  // Implementation goes here
+  Fail("Implementation is missing.");
+}
+
+bool Table::column_nullable(const ColumnID column_id) const {
   // Implementation goes here
   Fail("Implementation is missing.");
 }

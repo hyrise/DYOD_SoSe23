@@ -12,18 +12,19 @@ DictionarySegment<T>::DictionarySegment(const std::shared_ptr<AbstractSegment>& 
 template <typename T>
 AllTypeVariant DictionarySegment<T>::operator[](const ChunkOffset chunk_offset) const {
   // Implementation goes here
-  return AllTypeVariant{};
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 T DictionarySegment<T>::get(const ChunkOffset chunk_offset) const {
   // Implementation goes here
-  return T{};
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
-void DictionarySegment<T>::append(const AllTypeVariant& value) {
-  Fail("Dictionary segments are immutable, i.e., values cannot be appended.");
+std::optional<T> DictionarySegment<T>::get_typed_value(const ChunkOffset chunk_offset) const {
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
@@ -35,7 +36,13 @@ const std::vector<T>& DictionarySegment<T>::dictionary() const {
 template <typename T>
 std::shared_ptr<const AbstractAttributeVector> DictionarySegment<T>::attribute_vector() const {
   // Implementation goes here
-  return nullptr;
+  Fail("Implementation is missing.");
+}
+
+template <typename T>
+ValueID DictionarySegment<T>::null_value_id() const {
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
@@ -47,31 +54,31 @@ const T DictionarySegment<T>::value_of_value_id(const ValueID value_id) const {
 template <typename T>
 ValueID DictionarySegment<T>::lower_bound(const T value) const {
   // Implementation goes here
-  return ValueID{};
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 ValueID DictionarySegment<T>::lower_bound(const AllTypeVariant& value) const {
   // Implementation goes here
-  return ValueID{};
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 ValueID DictionarySegment<T>::upper_bound(const T value) const {
   // Implementation goes here
-  return ValueID{};
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 ValueID DictionarySegment<T>::upper_bound(const AllTypeVariant& value) const {
   // Implementation goes here
-  return ValueID{};
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 ChunkOffset DictionarySegment<T>::unique_values_count() const {
   // Implementation goes here
-  return ChunkOffset{};
+  Fail("Implementation is missing.");
 }
 
 template <typename T>

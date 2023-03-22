@@ -1,13 +1,6 @@
 #include "base_test.hpp"
 
-#include <algorithm>
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
-
 #include "storage/storage_manager.hpp"
-#include "storage/table.hpp"
 #include "type_cast.hpp"
 
 namespace opossum {
@@ -31,21 +24,23 @@ void BaseTest::ASSERT_TABLE_EQ(std::shared_ptr<const Table> tleft, std::shared_p
 }
 
 BaseTest::Matrix BaseTest::_table_to_matrix(const Table& table) {
-  // initialize matrix with table sizes
-  Matrix matrix(table.row_count(), std::vector<AllTypeVariant>(table.column_count()));
+  // Initialize matrix with table sizes.
+  auto matrix = Matrix(table.row_count(), std::vector<AllTypeVariant>(table.column_count()));
 
-  // set values
-  unsigned row_offset = 0;
-  for (ChunkID chunk_id{0}; chunk_id < table.chunk_count(); chunk_id++) {
+  // Set values.
+  auto row_offset = uint64_t{0};
+  for (auto chunk_id = ChunkID{0}; chunk_id < table.chunk_count(); ++chunk_id) {
     const auto chunk = table.get_chunk(chunk_id);
 
-    // an empty table's chunk might be missing actual segments
-    if (chunk->size() == 0) continue;
+    // An empty table's chunk might be missing actual segments.
+    if (chunk->size() == 0) {
+      continue;
+    }
 
-    for (ColumnID column_id{0}; column_id < table.column_count(); ++column_id) {
-      std::shared_ptr<AbstractSegment> segment = chunk->get_segment(column_id);
+    for (auto column_id = ColumnID{0}; column_id < table.column_count(); ++column_id) {
+      const auto segment = chunk->get_segment(column_id);
 
-      for (ChunkOffset chunk_offset = 0; chunk_offset < chunk->size(); ++chunk_offset) {
+      for (auto chunk_offset = ChunkOffset{0}; chunk_offset < chunk->size(); ++chunk_offset) {
         matrix[row_offset + chunk_offset][column_id] = (*segment)[chunk_offset];
       }
     }
@@ -57,9 +52,9 @@ BaseTest::Matrix BaseTest::_table_to_matrix(const Table& table) {
 
 void BaseTest::_print_matrix(const BaseTest::Matrix& matrix) {
   std::cout << "-------------" << std::endl;
-  for (unsigned row = 0; row < matrix.size(); row++) {
-    for (ColumnID col{0}; col < matrix[row].size(); col++) {
-      std::cout << std::setw(8) << matrix[row][col] << " ";
+  for (auto row = uint64_t{0}; row < matrix.size(); ++row) {
+    for (auto column = ColumnID{0}; column < matrix[row].size(); ++column) {
+      std::cout << std::setw(8) << matrix[row][column] << " ";
     }
     std::cout << std::endl;
   }
@@ -68,8 +63,8 @@ void BaseTest::_print_matrix(const BaseTest::Matrix& matrix) {
 
 ::testing::AssertionResult BaseTest::_table_equal(const Table& tleft, const Table& tright, bool order_sensitive,
                                                   bool strict_types) {
-  Matrix left = _table_to_matrix(tleft);
-  Matrix right = _table_to_matrix(tright);
+  auto left = _table_to_matrix(tleft);
+  auto right = _table_to_matrix(tright);
   // compare schema of tables
   //  - column count
   if (tleft.column_count() != tright.column_count()) {
@@ -79,10 +74,9 @@ void BaseTest::_print_matrix(const BaseTest::Matrix& matrix) {
   }
 
   //  - column names and types
-  std::string left_data_type, right_data_type;
-  for (ColumnID column_id{0}; column_id < tright.column_count(); ++column_id) {
-    left_data_type = tleft.column_type(column_id);
-    right_data_type = tright.column_type(column_id);
+  for (auto column_id = ColumnID{0}; column_id < tright.column_count(); ++column_id) {
+    auto left_data_type = tleft.column_type(column_id);
+    auto right_data_type = tright.column_type(column_id);
     // This is needed for the SQLiteTestrunner, since SQLite does not differentiate between float/double, and int/long.
     if (!strict_types) {
       if (left_data_type == "double") {
@@ -122,11 +116,11 @@ void BaseTest::_print_matrix(const BaseTest::Matrix& matrix) {
     std::sort(right.begin(), right.end());
   }
 
-  for (unsigned row = 0; row < left.size(); row++)
-    for (ColumnID column_id{0}; column_id < left[row].size(); column_id++) {
+  for (auto row = uint64_t{0}; row < left.size(); ++row)
+    for (auto column_id = ColumnID{0}; column_id < left[row].size(); ++column_id) {
       if (tleft.column_type(column_id) == "float") {
-        auto left_val = type_cast<float>(left[row][column_id]);
-        auto right_val = type_cast<float>(right[row][column_id]);
+        const auto left_val = type_cast<float>(left[row][column_id]);
+        const auto right_val = type_cast<float>(right[row][column_id]);
 
         if (strict_types) {
           EXPECT_EQ(tright.column_type(column_id), "float");
@@ -135,8 +129,8 @@ void BaseTest::_print_matrix(const BaseTest::Matrix& matrix) {
         }
         EXPECT_NEAR(left_val, right_val, 0.0001) << "Row/Column:" << row << "/" << column_id;
       } else if (tleft.column_type(column_id) == "double") {
-        auto left_val = type_cast<double>(left[row][column_id]);
-        auto right_val = type_cast<double>(right[row][column_id]);
+        const auto left_val = type_cast<double>(left[row][column_id]);
+        const auto right_val = type_cast<double>(right[row][column_id]);
 
         if (strict_types) {
           EXPECT_EQ(tright.column_type(column_id), "double");
@@ -146,8 +140,8 @@ void BaseTest::_print_matrix(const BaseTest::Matrix& matrix) {
         EXPECT_NEAR(left_val, right_val, 0.0001) << "Row/Column:" << row << "/" << column_id;
       } else {
         if (!strict_types && (tleft.column_type(column_id) == "int" || tleft.column_type(column_id) == "long")) {
-          auto left_val = type_cast<int64_t>(left[row][column_id]);
-          auto right_val = type_cast<int64_t>(right[row][column_id]);
+          const auto left_val = type_cast<int64_t>(left[row][column_id]);
+          const auto right_val = type_cast<int64_t>(right[row][column_id]);
           EXPECT_EQ(left_val, right_val) << "Row:" << row + 1 << " Column_id:" << column_id + 1;
         } else {
           EXPECT_EQ(left[row][column_id], right[row][column_id]) << "Row:" << row + 1 << " Column:" << column_id + 1;
@@ -158,6 +152,8 @@ void BaseTest::_print_matrix(const BaseTest::Matrix& matrix) {
   return ::testing::AssertionSuccess();
 }
 
-BaseTest::~BaseTest() { StorageManager::get().reset(); }
+BaseTest::~BaseTest() {
+  StorageManager::get().reset();
+}
 
 }  // namespace opossum

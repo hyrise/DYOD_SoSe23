@@ -6,7 +6,9 @@ AbstractOperator::AbstractOperator(const std::shared_ptr<const AbstractOperator>
                                    const std::shared_ptr<const AbstractOperator> right)
     : _left_input(left), _right_input(right) {}
 
-void AbstractOperator::execute() { _output = _on_execute(); }
+void AbstractOperator::execute() {
+  _output = _on_execute();
+}
 
 std::shared_ptr<const Table> AbstractOperator::get_output() const {
   // TODO(student): You should place some meaningful checks here
@@ -14,8 +16,12 @@ std::shared_ptr<const Table> AbstractOperator::get_output() const {
   return _output;
 }
 
-std::shared_ptr<const Table> AbstractOperator::_left_input_table() const { return _left_input->get_output(); }
+std::shared_ptr<const Table> AbstractOperator::_left_input_table() const {
+  return _left_input->get_output();
+}
 
-std::shared_ptr<const Table> AbstractOperator::_right_input_table() const { return _right_input->get_output(); }
+std::shared_ptr<const Table> AbstractOperator::_right_input_table() const {
+  return _right_input->get_output();
+}
 
 }  // namespace opossum

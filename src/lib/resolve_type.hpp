@@ -1,18 +1,10 @@
 #pragma once
 
-#include <functional>
-#include <memory>
-#include <string>
-#include <utility>
-
 #include <boost/hana/equal.hpp>
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/size.hpp>
 
 #include "all_type_variant.hpp"
-#include "utils/assert.hpp"
-
-#include "storage/value_segment.hpp"
 
 namespace opossum {
 

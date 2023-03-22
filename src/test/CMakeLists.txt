@@ -7,7 +7,7 @@ set(
 )
 
 set(
-    HYRISE_TEST_SOURCES
+    OPOSSUM_TEST_SOURCES
     ${SHARED_SOURCES}
     lib/all_type_variant_test.cpp
     operators/get_table_test.cpp
@@ -22,7 +22,7 @@ set(
     storage/value_segment_test.cpp
 )
 
-# Both hyriseTest and hyriseSanitizers link against these
+# Both opossumTest and opossumSanitizers link against these
 set(
     LIBRARIES
     gtest
@@ -46,16 +46,16 @@ set(
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-# Configure hyriseTest
-add_executable(hyriseTest ${HYRISE_TEST_SOURCES})
-target_link_libraries(hyriseTest hyrise ${LIBRARIES})
+# Configure opossumTest
+add_executable(opossumTest ${OPOSSUM_TEST_SOURCES})
+target_link_libraries(opossumTest opossum ${LIBRARIES})
 
-# Configure hyriseCoverageApp
-add_executable(hyriseCoverage EXCLUDE_FROM_ALL ${HYRISE_TEST_SOURCES})
-target_link_libraries(hyriseCoverage hyriseCoverageLib ${LIBRARIES} --coverage)
-set_target_properties(hyriseCoverage PROPERTIES COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
+# Configure opossumCoverageApp
+add_executable(opossumCoverage EXCLUDE_FROM_ALL ${OPOSSUM_TEST_SOURCES})
+target_link_libraries(opossumCoverage opossumCoverageLib ${LIBRARIES} --coverage)
+set_target_properties(opossumCoverage PROPERTIES COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
 
-# Configure hyriseSanitizersApp
-add_executable(hyriseSanitizers EXCLUDE_FROM_ALL ${HYRISE_TEST_SOURCES})
-target_link_libraries(hyriseSanitizers hyriseSanitizersLib ${LIBRARIES_SANITIZERS} -fsanitize=address)
-set_target_properties(hyriseSanitizers PROPERTIES COMPILE_FLAGS "-fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer")
+# Configure opossumSanitizersApp
+add_executable(opossumSanitizers EXCLUDE_FROM_ALL ${OPOSSUM_TEST_SOURCES})
+target_link_libraries(opossumSanitizers opossumSanitizersLib ${LIBRARIES_SANITIZERS} -fsanitize=address)
+set_target_properties(opossumSanitizers PROPERTIES COMPILE_FLAGS "-fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer")

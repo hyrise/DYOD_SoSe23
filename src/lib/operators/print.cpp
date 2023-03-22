@@ -1,16 +1,27 @@
 #include "print.hpp"
 
-#include <algorithm>
 #include <iomanip>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <vector>
 
 #include "operators/table_wrapper.hpp"
 #include "storage/abstract_segment.hpp"
 #include "storage/table.hpp"
 #include "type_cast.hpp"
+
+namespace {
+
+using namespace opossum;  // NOLINT(build/namespaces)
+
+std::string print_column_type(const std::shared_ptr<const Table>& table, const ColumnID column_id) {
+  auto stream = std::stringstream{};
+  stream << table->column_type(column_id);
+  if (table->column_nullable(column_id)) {
+    stream << "_null";
+  }
+
+  return stream.str();
+}
+
+}  // namespace
 
 namespace opossum {
 
@@ -33,7 +44,7 @@ std::shared_ptr<const Table> Print::_on_execute() {
   }
   _out << "|" << std::endl;
   for (auto column_id = ColumnID{0}; column_id < left_column_count; ++column_id) {
-    _out << "|" << std::setw(widths[column_id]) << _left_input_table()->column_type(column_id) << std::setw(0);
+    _out << "|" << std::setw(widths[column_id]) << print_column_type(_left_input_table(), column_id) << std::setw(0);
   }
   _out << "|" << std::endl;
 

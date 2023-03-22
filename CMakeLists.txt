@@ -15,7 +15,7 @@ else()
 endif()
 
 # Enable address and undefined behavior sanitization if requested
-option(ENABLE_ADDR_UB_SANITIZATION "Set to ON to build Hyrise with ASAN and UBSAN enabled. Default: OFF" OFF)
+option(ENABLE_ADDR_UB_SANITIZATION "Set to ON to build Opossum with ASAN and UBSAN enabled. Default: OFF" OFF)
 if (${ENABLE_ADDR_UB_SANITIZATION})
     # add_compile_options() wants list, CMAKE_EXE_LINKER_FLAGS a string. There are probably cleverer ways than
     # duplicating the flags, but this is probably the simplest solution.
@@ -26,7 +26,7 @@ if (${ENABLE_ADDR_UB_SANITIZATION})
 endif()
 
 # Enable thread sanitization if requested
-option(ENABLE_THREAD_SANITIZATION "Set to ON to build Hyrise with TSAN enabled. Default: OFF" OFF)
+option(ENABLE_THREAD_SANITIZATION "Set to ON to build Opossum with TSAN enabled. Default: OFF" OFF)
 if (${ENABLE_THREAD_SANITIZATION})
     # add_compile_options() wants list, CMAKE_EXE_LINKER_FLAGS a string. There are probably cleverer ways than
     # duplicating the flags, but this is probably the simplest solution.

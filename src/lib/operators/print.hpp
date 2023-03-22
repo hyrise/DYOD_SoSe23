@@ -1,10 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <memory>
-#include <string>
-#include <vector>
-
 #include "abstract_operator.hpp"
 
 namespace opossum {

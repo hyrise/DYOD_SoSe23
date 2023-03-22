@@ -1,19 +1,9 @@
 #pragma once
 
-#include <memory>
-#include <optional>
-#include <string>
-#include <vector>
-
 #include "abstract_operator.hpp"
-#include "all_type_variant.hpp"
-#include "types.hpp"
 #include "utils/assert.hpp"
 
 namespace opossum {
-
-class BaseTableScanImpl;
-class Table;
 
 class TableScan : public AbstractOperator {
  public:
@@ -24,7 +14,7 @@ class TableScan : public AbstractOperator {
 
   ColumnID column_id() const {
     // TODO(student) implement it in a source file and change this to a declaration.
-    return ColumnID{};
+    Fail("Implementation missing.");
   }
 
   ScanType scan_type() const {

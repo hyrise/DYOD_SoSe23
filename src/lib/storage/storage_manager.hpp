@@ -1,11 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <memory>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
 #include "storage/table.hpp"
 #include "types.hpp"
 
@@ -42,6 +36,7 @@ class StorageManager : private Noncopyable {
 
  protected:
   StorageManager() {}
+
   StorageManager& operator=(StorageManager&&) = default;
 
   // Implementation goes here

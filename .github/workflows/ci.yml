@@ -67,6 +67,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
+
       - name: Install Dependencies
         # The install script installs clang-15 and gcc-11. If you want to update the compiler versions, update them there.
         run: |
@@ -76,6 +77,7 @@ jobs:
           sudo update-alternatives --config clang++
           sudo update-alternatives --config clang-tidy
           sudo update-alternatives --config llvm-cov
+
       - name: System Information
         # Just ensure everything is set up correctly.
         run: |
@@ -83,25 +85,30 @@ jobs:
           ${{matrix.cxx}} --version
           clang-tidy --version
           llvm-cov --version
+
       - name: Setup CMake
         run: cmake -B ${build_dir} -DCMAKE_C_COMPILER=${{matrix.cc}} -DCMAKE_CXX_COMPILER=${{matrix.cxx}} -DCMAKE_BUILD_TYPE=${{matrix.type}} ${{matrix.build_options}}
+
       - name: Build the Library
         if: matrix.name == 'clangDebugTidy'
-        run: make -C ${build_dir} hyrise -j $(nproc) -k
+        run: make -C ${build_dir} opossum -j $(nproc) -k
+
       - name: Build the Project
         if: matrix.name != 'clangDebugTidy' && matrix.name != 'clangDebugCoverage'
         run: make -C ${build_dir} -j $(nproc)
+
       - name: Run Tests
         if: matrix.name != 'clangDebugTidy' && matrix.name != 'clangDebugCoverage'
-        run: ${build_dir}/hyriseTest
+        run: ${build_dir}/opossumTest
+
       - name: Build and Run Tests for Coverage Report
         if: matrix.name == 'clangDebugCoverage'
         continue-on-error: true
         run: |
-          make -C ${build_dir} hyriseCoverage -j $(nproc)
-          ./${build_dir}/hyriseCoverage
+          make -C ${build_dir} opossumCoverage -j $(nproc)
+          ./${build_dir}/opossumCoverage
+
       - name: Create Coverage Report
         if: matrix.name == 'clangDebugCoverage'
         # We cannot use ./scripts/coverage.sh directly because we need to explicitly tell gcovr to use the clang version.
-        run: |
-          gcovr -s -r . --exclude="(.*types*.|.*test*.|.*\.pb\.|third_party)" --gcov-executable "llvm-cov gcov"
+        run: gcovr -s -r . --exclude="(.*types*.|.*test*.|.*\.pb\.|third_party)" --gcov-executable "llvm-cov gcov"

@@ -1,22 +1,10 @@
 #pragma once
 
-#include <limits>
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
-
 #include "abstract_segment.hpp"
-#include "all_type_variant.hpp"
-#include "types.hpp"
 
 namespace opossum {
 
 class AbstractAttributeVector;
-
-// Even though ValueIDs do not have to use the full width of ValueID (uint32_t), this will also work for smaller ValueID
-// types (uint8_t, uint16_t) since after a down-cast INVALID_VALUE_ID will look like their numeric_limit::max().
-constexpr ValueID INVALID_VALUE_ID{std::numeric_limits<ValueID::base_type>::max()};
 
 // Dictionary is a specific segment type that stores all its values in a vector
 template <typename T>
@@ -27,14 +15,14 @@ class DictionarySegment : public AbstractSegment {
    */
   explicit DictionarySegment(const std::shared_ptr<AbstractSegment>& abstract_segment);
 
-  // Return the value at a certain position. If you want to write efficient operators, back off!
+  // Returns the value at a certain position. If you want to write efficient operators, back off!
   AllTypeVariant operator[](const ChunkOffset chunk_offset) const override;
 
-  // Return the value at a certain position.
+  // Returns the value at a certain position. Throws an error if value is NULL.
   T get(const ChunkOffset chunk_offset) const;
 
-  // Dictionary segments are immutable.
-  void append(const AllTypeVariant& value) override;
+  // Returns the value at a certain position. Returns std::nullopt if the value is NULL.
+  std::optional<T> get_typed_value(const ChunkOffset chunk_offset) const;
 
   // Returns an underlying dictionary.
   const std::vector<T>& dictionary() const;
@@ -42,7 +30,10 @@ class DictionarySegment : public AbstractSegment {
   // Returns an underlying data structure.
   std::shared_ptr<const AbstractAttributeVector> attribute_vector() const;
 
-  // Return the value represented by a given ValueID.
+  // Returns the ValueID used to represent a NULL value.
+  ValueID null_value_id() const;
+
+  // Returns the value represented by a given ValueID.
   const T value_of_value_id(const ValueID value_id) const;
 
   // Returns the first value ID that refers to a value >= the search value. Returns INVALID_VALUE_ID if all values are
@@ -59,10 +50,10 @@ class DictionarySegment : public AbstractSegment {
   // Same as upper_bound(T), but accepts an AllTypeVariant.
   ValueID upper_bound(const AllTypeVariant& value) const;
 
-  // Return the number of unique_values (dictionary entries).
+  // Returns the number of unique_values (dictionary entries).
   ChunkOffset unique_values_count() const;
 
-  // Return the number of entries.
+  // Returns the number of entries.
   ChunkOffset size() const override;
 
   // Returns the calculated memory usage.
@@ -72,5 +63,7 @@ class DictionarySegment : public AbstractSegment {
   std::vector<T> _dictionary;
   std::shared_ptr<AbstractAttributeVector> _attribute_vector;
 };
+
+EXPLICITLY_DECLARE_DATA_TYPES(DictionarySegment);
 
 }  // namespace opossum

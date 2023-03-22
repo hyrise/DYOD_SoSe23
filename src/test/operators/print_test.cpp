@@ -1,9 +1,4 @@
-#include <memory>
-#include <string>
-#include <vector>
-
 #include "base_test.hpp"
-#include "gtest/gtest.h"
 
 #include "operators/get_table.hpp"
 #include "operators/print.hpp"
@@ -16,8 +11,8 @@ class OperatorsPrintTest : public BaseTest {
  protected:
   void SetUp() override {
     _table = std::make_shared<Table>(_chunk_size);
-    _table->add_column("col_1", "int");
-    _table->add_column("col_2", "string");
+    _table->add_column("col_1", "int", false);
+    _table->add_column("col_2", "string", true);
     StorageManager::get().add_table(_table_name, _table);
 
     _get_table_oper = std::make_shared<GetTable>(_table_name);
@@ -37,6 +32,7 @@ class PrintWrapper : public Print {
 
  public:
   explicit PrintWrapper(const std::shared_ptr<AbstractOperator> in) : Print(in), _table(in->get_output()) {}
+
   std::vector<uint16_t> test_column_string_widths(uint16_t min, uint16_t max) {
     return _column_string_widths(min, max, _table);
   }
@@ -55,7 +51,7 @@ TEST_F(OperatorsPrintTest, EmptyTable) {
   EXPECT_TRUE(output_str.find("col_1") != std::string::npos);
   EXPECT_TRUE(output_str.find("col_2") != std::string::npos);
   EXPECT_TRUE(output_str.find("int") != std::string::npos);
-  EXPECT_TRUE(output_str.find("string") != std::string::npos);
+  EXPECT_TRUE(output_str.find("string_null") != std::string::npos);
   EXPECT_TRUE(output_str.find("Empty chunk.") != std::string::npos);
 }
 

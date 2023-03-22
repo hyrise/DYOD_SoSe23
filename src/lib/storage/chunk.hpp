@@ -1,12 +1,6 @@
 #pragma once
 
-// the linter wants this to be above everything else
-#include <shared_mutex>
-
-#include <atomic>
 #include <memory>
-#include <string>
-#include <vector>
 
 #include "all_type_variant.hpp"
 #include "types.hpp"
@@ -16,8 +10,8 @@ namespace opossum {
 class BaseIndex;
 class AbstractSegment;
 
-// A chunk is a horizontal partition of a table.
-// For each column in the table, it holds one segment. The segments across all chunks constitute the column.
+// A chunk is a horizontal partition of a table. For each column in the table, it holds one segment. The segments
+// across all chunks constitute the column.
 //
 // Find more information about this in our wiki: https://github.com/hyrise/hyrise/wiki/chunk-concept
 class Chunk : private Noncopyable {

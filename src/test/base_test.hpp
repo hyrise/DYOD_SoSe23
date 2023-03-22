@@ -5,24 +5,19 @@
 #include <utility>
 #include <vector>
 
-#include "../lib/storage/table.hpp"
-#include "../lib/storage/value_segment.hpp"
-#include "../lib/types.hpp"
+#include "storage/table.hpp"
+#include "storage/value_segment.hpp"
+#include "types.hpp"
 
 #include "gtest/gtest.h"
 
 namespace opossum {
 
-class AbstractASTNode;
-class Table;
-
-using Matrix = std::vector<std::vector<AllTypeVariant>>;
-
 class BaseTest : public ::testing::Test {
   using Matrix = std::vector<std::vector<AllTypeVariant>>;
 
   // helper functions for _table_equal
-  static BaseTest::Matrix _table_to_matrix(const Table& table);
+  static Matrix _table_to_matrix(const Table& table);
   static void _print_matrix(const BaseTest::Matrix& matrix);
 
   // helper function for load_table

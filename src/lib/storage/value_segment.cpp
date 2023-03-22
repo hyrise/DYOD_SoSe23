@@ -1,16 +1,14 @@
 #include "value_segment.hpp"
 
-#include <limits>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <utility>
-#include <vector>
-
 #include "type_cast.hpp"
 #include "utils/assert.hpp"
 
 namespace opossum {
+
+template <typename T>
+ValueSegment<T>::ValueSegment(bool nullable) {
+  // Implementation goes here
+}
 
 template <typename T>
 AllTypeVariant ValueSegment<T>::operator[](const ChunkOffset chunk_offset) const {
@@ -19,7 +17,25 @@ AllTypeVariant ValueSegment<T>::operator[](const ChunkOffset chunk_offset) const
 }
 
 template <typename T>
-void ValueSegment<T>::append(const AllTypeVariant& val) {
+bool ValueSegment<T>::is_null(const ChunkOffset chunk_offset) const {
+  // Implementation goes here
+  Fail("Implementation is missing.");
+}
+
+template <typename T>
+T ValueSegment<T>::get(const ChunkOffset chunk_offset) const {
+  // Implementation goes here
+  Fail("Implementation is missing.");
+}
+
+template <typename T>
+std::optional<T> ValueSegment<T>::get_typed_value(const ChunkOffset chunk_offset) const {
+  // Implementation goes here
+  Fail("Implementation is missing.");
+}
+
+template <typename T>
+void ValueSegment<T>::append(const AllTypeVariant& value) {
   // Implementation goes here
   Fail("Implementation is missing.");
 }
@@ -27,11 +43,23 @@ void ValueSegment<T>::append(const AllTypeVariant& val) {
 template <typename T>
 ChunkOffset ValueSegment<T>::size() const {
   // Implementation goes here
-  return ChunkOffset{std::numeric_limits<ChunkOffset>::max()};
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 const std::vector<T>& ValueSegment<T>::values() const {
+  // Implementation goes here
+  Fail("Implementation is missing.");
+}
+
+template <typename T>
+bool ValueSegment<T>::is_nullable() const {
+  // Implementation goes here
+  Fail("Implementation is missing.");
+}
+
+template <typename T>
+const std::vector<bool>& ValueSegment<T>::null_values() const {
   // Implementation goes here
   Fail("Implementation is missing.");
 }
