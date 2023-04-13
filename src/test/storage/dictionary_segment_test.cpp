@@ -25,10 +25,10 @@ TEST_F(StorageDictionarySegmentTest, CompressSegmentString) {
   const auto dict_segment = std::make_shared<DictionarySegment<std::string>>(value_segment_str);
 
   // Test attribute_vector size.
-  EXPECT_EQ(dict_segment->size(), 7u);
+  EXPECT_EQ(dict_segment->size(), 7);
 
   // Test dictionary size (uniqueness).
-  EXPECT_EQ(dict_segment->unique_values_count(), 4u);
+  EXPECT_EQ(dict_segment->unique_values_count(), 4);
 
   // Test sorting.
   const auto& dict = dict_segment->dictionary();

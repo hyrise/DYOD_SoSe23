@@ -85,7 +85,7 @@ class OperatorsTableScanTest : public BaseTest {
       }
     }
 
-    ASSERT_EQ(expected.size(), 0u);
+    ASSERT_TRUE(expected.empty());
   }
 
   std::shared_ptr<TableWrapper> _table_wrapper, _table_wrapper_even_dict;
@@ -108,7 +108,7 @@ TEST_F(OperatorsTableScanTest, EmptyResultScan) {
   scan_1->execute();
 
   for (auto chunk_index = ChunkID{0}; chunk_index < scan_1->get_output()->chunk_count(); chunk_index++)
-    EXPECT_EQ(scan_1->get_output()->get_chunk(chunk_index)->column_count(), 2u);
+    EXPECT_EQ(scan_1->get_output()->get_chunk(chunk_index)->column_count(), 2);
 }
 
 TEST_F(OperatorsTableScanTest, SingleScanReturnsCorrectRowCount) {

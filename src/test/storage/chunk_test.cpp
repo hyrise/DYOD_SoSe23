@@ -26,22 +26,22 @@ class StorageChunkTest : public BaseTest {
 };
 
 TEST_F(StorageChunkTest, AddSegmentToChunk) {
-  EXPECT_EQ(chunk.size(), 0u);
+  EXPECT_EQ(chunk.size(), 0);
   chunk.add_segment(int_value_segment);
   chunk.add_segment(string_value_segment);
-  EXPECT_EQ(chunk.size(), 3u);
+  EXPECT_EQ(chunk.size(), 3);
 }
 
 TEST_F(StorageChunkTest, AddValuesToChunk) {
   chunk.add_segment(int_value_segment);
   chunk.add_segment(string_value_segment);
   chunk.append({2, "two"});
-  EXPECT_EQ(chunk.size(), 4u);
+  EXPECT_EQ(chunk.size(), 4);
 
   if constexpr (OPOSSUM_DEBUG) {
     EXPECT_THROW(chunk.append({}), std::logic_error);
     EXPECT_THROW(chunk.append({4, "val", 3}), std::logic_error);
-    EXPECT_EQ(chunk.size(), 4u);
+    EXPECT_EQ(chunk.size(), 4);
   }
 }
 
@@ -51,7 +51,7 @@ TEST_F(StorageChunkTest, RetrieveSegment) {
   chunk.append({2, "two"});
 
   auto segment = chunk.get_segment(ColumnID{0});
-  EXPECT_EQ(segment->size(), 4u);
+  EXPECT_EQ(segment->size(), 4);
 }
 
 }  // namespace opossum

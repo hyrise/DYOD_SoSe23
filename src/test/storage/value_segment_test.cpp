@@ -12,39 +12,39 @@ class StorageValueSegmentTest : public BaseTest {
 };
 
 TEST_F(StorageValueSegmentTest, GetSize) {
-  EXPECT_EQ(int_value_segment.size(), 0u);
-  EXPECT_EQ(string_value_segment.size(), 0u);
-  EXPECT_EQ(double_value_segment.size(), 0u);
+  EXPECT_EQ(int_value_segment.size(), 0);
+  EXPECT_EQ(string_value_segment.size(), 0);
+  EXPECT_EQ(double_value_segment.size(), 0);
 }
 
 TEST_F(StorageValueSegmentTest, AppendValueOfSameType) {
   int_value_segment.append(3);
-  EXPECT_EQ(int_value_segment.size(), 1u);
+  EXPECT_EQ(int_value_segment.size(), 1);
 
   string_value_segment.append("Hello");
-  EXPECT_EQ(string_value_segment.size(), 1u);
+  EXPECT_EQ(string_value_segment.size(), 1);
 
   double_value_segment.append(3.14);
-  EXPECT_EQ(double_value_segment.size(), 1u);
+  EXPECT_EQ(double_value_segment.size(), 1);
 }
 
 TEST_F(StorageValueSegmentTest, AppendValueOfDifferentType) {
   int_value_segment.append(3.14);
-  EXPECT_EQ(int_value_segment.size(), 1u);
+  EXPECT_EQ(int_value_segment.size(), 1);
   EXPECT_THROW(int_value_segment.append("Hi"), std::logic_error);
 
   string_value_segment.append(3);
   string_value_segment.append(4.44);
-  EXPECT_EQ(string_value_segment.size(), 2u);
+  EXPECT_EQ(string_value_segment.size(), 2);
 
   double_value_segment.append(4);
-  EXPECT_EQ(double_value_segment.size(), 1u);
+  EXPECT_EQ(double_value_segment.size(), 1);
   EXPECT_THROW(double_value_segment.append("Hi"), std::logic_error);
 }
 
 TEST_F(StorageValueSegmentTest, AppendNullValue) {
   int_value_segment.append(NULL_VALUE);
-  EXPECT_EQ(int_value_segment.size(), 1u);
+  EXPECT_EQ(int_value_segment.size(), 1);
 
   EXPECT_THROW(string_value_segment.append(NULL_VALUE), std::logic_error);
   EXPECT_THROW(double_value_segment.append(NULL_VALUE), std::logic_error);
