@@ -14,4 +14,5 @@
 
 
 ## Dependencies that are integrated in our build process via git submodules
+- cpplint (https://github.com/cpplint/cpplint)
 - googletest (https://github.com/google/googletest)

@@ -65,9 +65,8 @@ If you want to test a single module, class or test you have to execute the test 
 
 ## Maintainers
 
-- David Justen
+- Daniel Lindner
 - Marcel Weisgut
 - Martin Boissier
-- Thomas Bodner
 
 Contact: firstname.lastname@hpi.de
