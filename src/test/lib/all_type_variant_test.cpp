@@ -29,6 +29,8 @@ TYPED_TEST(AllTypeVariantTest, GetExtractsExactValue) {
       const auto variant = AllTypeVariant{value_in};
 
       EXPECT_NE(variant, NULL_VALUE);
+      EXPECT_FALSE(variant < NULL_VALUE);
+      EXPECT_FALSE(variant > NULL_VALUE);
       EXPECT_TRUE(variant_is_null(variant));
     } else {
       const auto variant = AllTypeVariant{value_in};

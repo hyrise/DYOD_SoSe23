@@ -1,10 +1,10 @@
 # OpossumDB
 
-*Have a look at our [contributor guidelines](CONTRIBUTING.md)*
+*Have a look at our [contributor guidelines](CONTRIBUTING.md).*
 
 ## Dependencies
-You can install the dependencies on your own or use the install_dependencies.sh script (**recommended**) which installs all of the therein listed dependencies and submodules.
-The install script was tested under macOS Monterey and Ubuntu 20.04 (apt-get).
+You can install the dependencies on your own or use the `install_dependencies.sh` script (**recommended**), which installs all of the therein listed dependencies and submodules.
+The install script was tested under macOS Monterey and Ubuntu 22.04 (apt-get).
 
 See [dependencies.md](dependencies.md) for a detailed list of dependencies to use with `brew install` or `apt-get install`, depending on your platform. As compilers, we generally use the most recent version of gcc and clang.
 Older versions may work, but are neither tested nor supported.
@@ -37,8 +37,7 @@ Calling `make opossumTest` from the build directory builds all available tests. 
 ### Coverage
 After building `opossumCoverage`, `./scripts/coverage.sh <build dir>` will print a summary to the command line and create detailed html reports at ./coverage/index.html
 
-*Supports only clang on MacOS and only gcc on linux*
-cm
+*Supports only clang on macOS.*
 
 ### Address/UndefinedBehavior Sanitizers
 `cmake -DENABLE_ADDR_UB_SANITIZATION=ON` will generate Makefiles with AddressSanitizer and Undefined Behavior options.
@@ -54,14 +53,13 @@ The binary can be executed with `LSAN_OPTIONS=suppressions=asan-ignore.txt ./<Yo
 
 ## Naming convention for gtest macros:
 
-TEST(ModuleNameClassNameTest, TestName), e.g., TEST(OperatorsGetTableTest, RowCount)
-same for fixtures Test_F()
+We use the schema `TEST(ModuleNameClassNameTest, TestName)`, e.g., `TEST(OperatorsGetTableTest, RowCount)` (same for fixtures `Test_F()`).
 
-If you want to test a single module, class or test you have to execute the test binary and use the `gtest_filter` option:
+If you want to test a single module, class, or test, you have to execute the test binary and use the `gtest_filter` option:
 
-- Testing the storage module: `./build/test --gtest_filter="Storage*"`
-- Testing the table class: `./build/test --gtest_filter="StorageTableTest*"`
-- Testing the RowCount test: `./build/test --gtest_filter="StorageTableTest.RowCount"`
+- Testing the storage module: `./build/opossumTest --gtest_filter="Storage*"`
+- Testing the table class: `./build/opossumTest --gtest_filter="StorageTableTest*"`
+- Testing the RowCount test: `./build/opossumTest --gtest_filter="StorageTableTest.RowCount"`
 
 ## Maintainers
 
