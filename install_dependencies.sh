@@ -62,13 +62,16 @@ if echo $REPLY | grep -E '^[Yy]$' > /dev/null; then
                     exit 1
                 fi
 
-                sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11
-                # The Github Action does not like clang slaves.
-                sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 110
-                sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-15 110
-                sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-15 110
-                sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 110
-                sudo update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-15 110
+                # Force GitHub workflow runners to use the desired compiler versions.
+                if [[ $OPOSSUM_HEADLESS_SETUP ]]; then
+                    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11
+                    # The Github Action does not like clang slaves.
+                    sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 110
+                    sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-15 110
+                    sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-15 110
+                    sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 110
+                    sudo update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-15 110
+                fi
 
             else
                 echo "Error during installation."
