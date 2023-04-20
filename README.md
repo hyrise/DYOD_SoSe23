@@ -19,11 +19,13 @@ Subsequent calls to CMake, e.g., when adding files to the build will not be nece
 CMake will default to your system's default compiler.
 To use a different one, call like `cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ..` in a clean build directory.
 
+If you use macOS, you will have to add the path to your brew clang version: `cmake -DCMAKE_C_COMPILER=$(brew --prefix llvm)/bin/clang -DCMAKE_CXX_COMPILER=$(brew --prefix llvm)/bin/clang++ ..`.
+
 ### Build
 Simply call `make -j*`, where `*` denotes the number of threads to use.
 
 Usually debug binaries are created.
-To configure a build directory for a release build make sure it is empty and call CMake like `cmake -DCMAKE_BUILD_TYPE=Release`
+To configure a build directory for a release build make sure it is empty and call CMake like `cmake -DCMAKE_BUILD_TYPE=Release`.
 
 ### Lint
 `./scripts/lint.sh` (Google's cpplint is used.)
