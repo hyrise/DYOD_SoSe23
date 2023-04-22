@@ -46,6 +46,9 @@ class ValueSegment : public AbstractSegment {
 
  protected:
   // Implementation goes here
+  std::vector<T> _entries;
+  std::vector<bool> _is_null_entries;
+  bool _nullable;
 };
 
 EXPLICITLY_DECLARE_DATA_TYPES(ValueSegment);
