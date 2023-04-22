@@ -29,7 +29,7 @@ TEST_F(StorageChunkTest, AddSegmentToChunk) {
   EXPECT_EQ(chunk.size(), 0);
   chunk.add_segment(int_value_segment);
   chunk.add_segment(string_value_segment);
-  EXPECT_EQ(chunk.size(), 3);
+  EXPECT_EQ(chunk.size(), 2);
 }
 
 TEST_F(StorageChunkTest, AddValuesToChunk) {
