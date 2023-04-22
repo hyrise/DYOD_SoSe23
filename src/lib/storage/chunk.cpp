@@ -6,26 +6,30 @@
 namespace opossum {
 
 void Chunk::add_segment(const std::shared_ptr<AbstractSegment> segment) {
-  // Implementation goes here
+  _segments.emplace_back(segment);
 }
 
 void Chunk::append(const std::vector<AllTypeVariant>& values) {
-  // Implementation goes here
+  DebugAssert(
+      values.size()==_segments.size(),
+      "Different amount of values compared to columns."
+  );
+  for(auto index = size_t{0}; index < values.size(); index++){
+    auto segment = _segments.at(index);
+    segment->append(values.at(index));
+  }
 }
 
 std::shared_ptr<AbstractSegment> Chunk::get_segment(const ColumnID column_id) const {
-  // Implementation goes here
-  Fail("Implementation is missing.");
+  return _segments.at(column_id);
 }
 
 ColumnCount Chunk::column_count() const {
-  // Implementation goes here
-  Fail("Implementation is missing.");
+  return ColumnCount{_segments.size()};
 }
 
 ChunkOffset Chunk::size() const {
-  // Implementation goes here
-  Fail("Implementation is missing.");
+  return _segments.size() ? _segments[0]->size() : 0;
 }
 
 }  // namespace opossum
