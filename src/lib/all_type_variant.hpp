@@ -66,6 +66,7 @@ using AllTypeVariant = typename boost::make_variant_over<detail::TypesAsMplVecto
 }  // namespace detail
 
 static constexpr auto types = detail::types;
+static constexpr auto types_including_null = detail::types_including_null;
 static constexpr auto data_types = detail::data_types;
 
 using AllTypeVariant = detail::AllTypeVariant;
