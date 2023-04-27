@@ -27,7 +27,7 @@ constexpr auto index_of(Sequence const& sequence, T const& element) {
 // Retrieves the value stored in an AllTypeVariant without conversion
 template <typename T>
 const T& get(const AllTypeVariant& value) {
-  static_assert(hana::contains(types, hana::type_c<T>), "Type not in AllTypeVariant");
+  static_assert(hana::contains(types_including_null, hana::type_c<T>), "Type not in AllTypeVariant");
   return boost::get<T>(value);
 }
 
@@ -36,7 +36,7 @@ const T& get(const AllTypeVariant& value) {
 // Template specialization for everything but integral types
 template <typename T>
 std::enable_if_t<!std::is_integral<T>::value, T> type_cast(const AllTypeVariant& value) {
-  if (static_cast<size_t>(value.which()) == detail::index_of(types, hana::type_c<T>)) {
+  if (static_cast<size_t>(value.which()) == detail::index_of(types_including_null, hana::type_c<T>)) {
     return get<T>(value);
   }
 
@@ -46,7 +46,7 @@ std::enable_if_t<!std::is_integral<T>::value, T> type_cast(const AllTypeVariant&
 // Template specialization for integral types
 template <typename T>
 std::enable_if_t<std::is_integral<T>::value, T> type_cast(const AllTypeVariant& value) {
-  if (static_cast<size_t>(value.which()) == detail::index_of(types, hana::type_c<T>)) {
+  if (static_cast<size_t>(value.which()) == detail::index_of(types_including_null, hana::type_c<T>)) {
     return get<T>(value);
   }
 
