@@ -1,8 +1,8 @@
 #pragma once
 
-#include "value_segment.hpp"
 #include "all_type_variant.hpp"
 #include "types.hpp"
+#include "value_segment.hpp"
 
 namespace opossum {
 
@@ -36,7 +36,7 @@ class Chunk : private Noncopyable {
 
  protected:
   // Implementation goes here
- private: 
+ private:
   std::vector<std::shared_ptr<AbstractSegment>> _columns;
 };
 

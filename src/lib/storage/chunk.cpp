@@ -17,6 +17,8 @@ void Chunk::append(const std::vector<AllTypeVariant>& values) {
   auto value_it = values.begin();
 
   while (column_it != _columns.end()) {
+    // Still very ugly.
+    // TODO(Robert): Find a way to iterate over the available data types in all_type_variant
 
     bool success = false;
     auto s1 = std::dynamic_pointer_cast<ValueSegment<int32_t>>(*column_it);
@@ -54,7 +56,6 @@ void Chunk::append(const std::vector<AllTypeVariant>& values) {
     ++column_it;
     ++value_it;
   }
-
 }
 
 std::shared_ptr<AbstractSegment> Chunk::get_segment(const ColumnID column_id) const {
@@ -69,7 +70,8 @@ ColumnCount Chunk::column_count() const {
 
 ChunkOffset Chunk::size() const {
   // Implementation goes here
-  if (_columns.size() == 0) return ChunkOffset{0};
+  if (_columns.size() == 0)
+    return ChunkOffset{0};
   return static_cast<ChunkOffset>((*_columns[0]).size());
 }
 
