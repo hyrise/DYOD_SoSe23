@@ -67,6 +67,11 @@ class Table : private Noncopyable {
   void compress_chunk(const ChunkID chunk_id);
 
  protected:
+  std::vector<std::shared_ptr<Chunk>> _chunks;
+  std::vector<std::string> _column_names; 
+  std::vector<std::string> _column_types;  
+  std::vector<bool> _column_nullable; 
+  unsigned int _chunk_size; 
   // Implementation goes here
 };
 
