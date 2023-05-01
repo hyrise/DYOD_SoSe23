@@ -1,7 +1,6 @@
 #include "chunk.hpp"
-#include "abstract_segment.hpp"
+
 #include "utils/assert.hpp"
-#include "value_segment.hpp"
 
 namespace opossum {
 
@@ -12,15 +11,45 @@ void Chunk::add_segment(const std::shared_ptr<AbstractSegment> column) {
 
 void Chunk::append(const std::vector<AllTypeVariant>& values) {
   // Implementation goes here
-  Assert(values.size() == column_count(), "Cannot insert a tuple with less values than columns.");
+  DebugAssert(values.size() == column_count(), "Cannot insert a tuple with less values than columns.");
 
   auto column_it = _columns.begin();
   auto value_it = values.begin();
 
   while (column_it != _columns.end()) {
-    const auto& segment = std::dynamic_pointer_cast<ValueSegment<AllTypeVariant>>(*column_it);
-    Assert(segment, "Casting to ValueSegment did not work.");
-    segment->append(*value_it);
+
+    bool success = false;
+    auto s1 = std::dynamic_pointer_cast<ValueSegment<int32_t>>(*column_it);
+    if (s1) {
+      s1->append(*value_it);
+      success = true;
+    }
+
+    auto s2 = std::dynamic_pointer_cast<ValueSegment<int64_t>>(*column_it);
+    if (!success && s2) {
+      s2->append(*value_it);
+      success = true;
+    }
+
+    auto s3 = std::dynamic_pointer_cast<ValueSegment<float>>(*column_it);
+    if (!success && s3) {
+      s3->append(*value_it);
+      success = true;
+    }
+
+    auto s4 = std::dynamic_pointer_cast<ValueSegment<double>>(*column_it);
+    if (!success && s4) {
+      s4->append(*value_it);
+      success = true;
+    }
+
+    auto s5 = std::dynamic_pointer_cast<ValueSegment<std::string>>(*column_it);
+    if (!success && s5) {
+      s5->append(*value_it);
+      success = true;
+    }
+
+    DebugAssert(success, "Only ValueSegments can be appended to chunks.");
 
     ++column_it;
     ++value_it;
@@ -40,6 +69,7 @@ ColumnCount Chunk::column_count() const {
 
 ChunkOffset Chunk::size() const {
   // Implementation goes here
+  if (_columns.size() == 0) return ChunkOffset{0};
   return static_cast<ChunkOffset>((*_columns[0]).size());
 }
 

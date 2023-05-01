@@ -1,10 +1,8 @@
 #pragma once
 
-#include <memory>
-
+#include "value_segment.hpp"
 #include "all_type_variant.hpp"
 #include "types.hpp"
-#include "abstract_segment.hpp"
 
 namespace opossum {
 

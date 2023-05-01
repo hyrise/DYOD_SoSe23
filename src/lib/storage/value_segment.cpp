@@ -14,19 +14,19 @@ ValueSegment<T>::ValueSegment(bool nullable) {
 
 template <typename T>
 AllTypeVariant ValueSegment<T>::operator[](const ChunkOffset chunk_offset) const {
-  Assert(chunk_offset < size(), "Out of bounds.");
+  DebugAssert(chunk_offset < size(), "Out of bounds.");
   return values_.at(chunk_offset);
 }
 
 template <typename T>
 bool ValueSegment<T>::is_null(const ChunkOffset chunk_offset) const {
-  Assert(chunk_offset < size(), "Out of bounds.");
+  DebugAssert(chunk_offset < size(), "Out of bounds.");
   return is_nullable() && (*null_values_)[chunk_offset];
 }
 
 template <typename T>
 T ValueSegment<T>::get(const ChunkOffset chunk_offset) const {
-  Assert(chunk_offset < size(), "Out of bounds.");
+  DebugAssert(chunk_offset < size(), "Out of bounds.");
   if (is_nullable() && (*null_values_)[chunk_offset]) {
     throw std::logic_error("NULL value at chunk_offset.");
   }
@@ -35,7 +35,7 @@ T ValueSegment<T>::get(const ChunkOffset chunk_offset) const {
 
 template <typename T>
 std::optional<T> ValueSegment<T>::get_typed_value(const ChunkOffset chunk_offset) const {
-  Assert(chunk_offset < size(), "Out of bounds.");
+  DebugAssert(chunk_offset < size(), "Out of bounds.");
   if (is_nullable() && (*null_values_)[chunk_offset]) {
     return std::nullopt;
   }
