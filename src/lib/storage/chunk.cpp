@@ -14,11 +14,18 @@ void Chunk::append(const std::vector<AllTypeVariant>& values) {
   // Implementation goes here
   Assert(values.size() == column_count(), "Cannot insert a tuple with less values than columns.");
 
-  for (auto ind = uint32_t{0}; ind < values.size(); ++ind) {
-    const auto segment = std::dynamic_pointer_cast<ValueSegment<AllTypeVariant>>(_columns[ind]);
-    DebugAssert(segment, "Segment needs to be ValueSegment in order to cast to AbstractSegment");
-    segment->append(values.at(ind));
+  auto column_it = _columns.begin();
+  auto value_it = values.begin();
+
+  while (column_it != _columns.end()) {
+    const auto& segment = std::dynamic_pointer_cast<ValueSegment<AllTypeVariant>>(*column_it);
+    Assert(segment, "Casting to ValueSegment did not work.");
+    segment->append(*value_it);
+
+    ++column_it;
+    ++value_it;
   }
+
 }
 
 std::shared_ptr<AbstractSegment> Chunk::get_segment(const ColumnID column_id) const {
