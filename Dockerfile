@@ -6,6 +6,7 @@
 
 FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND noninteractive
+WORKDIR /app
 RUN apt-get update \
     && apt-get install -y \
         autoconf \
@@ -23,6 +24,7 @@ RUN apt-get update \
         gcc-9 \
         gcc-11 \
         gcovr \
+        gdb \
         git \
         graphviz \
         libboost-all-dev \

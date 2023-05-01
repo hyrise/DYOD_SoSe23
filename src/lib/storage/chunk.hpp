@@ -4,6 +4,7 @@
 
 #include "all_type_variant.hpp"
 #include "types.hpp"
+#include "abstract_segment.hpp"
 
 namespace opossum {
 
@@ -37,6 +38,8 @@ class Chunk : private Noncopyable {
 
  protected:
   // Implementation goes here
+ private: 
+  std::vector<std::shared_ptr<AbstractSegment>> _columns;
 };
 
 }  // namespace opossum
