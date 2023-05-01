@@ -9,6 +9,19 @@ void Chunk::add_segment(const std::shared_ptr<AbstractSegment> column) {
   _columns.push_back(column);
 }
 
+template <typename T>
+bool append_with_type(
+  std::vector<std::shared_ptr<AbstractSegment>>::iterator column_it, 
+  std::vector<AllTypeVariant>::const_iterator value_it)
+{
+    auto segment = std::dynamic_pointer_cast<ValueSegment<T>>(*column_it);
+    if (segment) {
+      segment->append(*value_it);
+      return true;
+    }
+    return false;
+}
+
 void Chunk::append(const std::vector<AllTypeVariant>& values) {
   // Implementation goes here
   DebugAssert(values.size() == column_count(), "Cannot insert a tuple with less values than columns.");
@@ -17,41 +30,15 @@ void Chunk::append(const std::vector<AllTypeVariant>& values) {
   auto value_it = values.begin();
 
   while (column_it != _columns.end()) {
-    // Still very ugly.
-    // TODO(Robert): Find a way to iterate over the available data types in all_type_variant
+    // Problem: How to iterate over the given data types in all_type_variant?
+    const auto no_types = types.storage_.size_;
+    DebugAssert(no_types == 5, "There are 5 supported data types but a different count was found.");
 
-    bool success = false;
-    auto s1 = std::dynamic_pointer_cast<ValueSegment<int32_t>>(*column_it);
-    if (s1) {
-      s1->append(*value_it);
-      success = true;
-    }
-
-    auto s2 = std::dynamic_pointer_cast<ValueSegment<int64_t>>(*column_it);
-    if (!success && s2) {
-      s2->append(*value_it);
-      success = true;
-    }
-
-    auto s3 = std::dynamic_pointer_cast<ValueSegment<float>>(*column_it);
-    if (!success && s3) {
-      s3->append(*value_it);
-      success = true;
-    }
-
-    auto s4 = std::dynamic_pointer_cast<ValueSegment<double>>(*column_it);
-    if (!success && s4) {
-      s4->append(*value_it);
-      success = true;
-    }
-
-    auto s5 = std::dynamic_pointer_cast<ValueSegment<std::string>>(*column_it);
-    if (!success && s5) {
-      s5->append(*value_it);
-      success = true;
-    }
-
-    DebugAssert(success, "Only ValueSegments can be appended to chunks.");
+    append_with_type<int32_t>(column_it, value_it);
+    append_with_type<int64_t>(column_it, value_it);
+    append_with_type<float>(column_it, value_it);
+    append_with_type<double>(column_it, value_it);
+    append_with_type<std::string>(column_it, value_it);
 
     ++column_it;
     ++value_it;
