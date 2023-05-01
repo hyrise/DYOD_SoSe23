@@ -7,88 +7,67 @@ namespace opossum {
 
 template <typename T>
 ValueSegment<T>::ValueSegment(bool nullable) {
-  if (nullable) {
-    null_values_ = std::vector<bool>();
-  }
+  // Implementation goes here
 }
 
 template <typename T>
 AllTypeVariant ValueSegment<T>::operator[](const ChunkOffset chunk_offset) const {
-  DebugAssert(chunk_offset >= 0 && chunk_offset < size(), "Out of bounds.");
-  return values_.at(chunk_offset);
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 bool ValueSegment<T>::is_null(const ChunkOffset chunk_offset) const {
-  DebugAssert(chunk_offset >= 0 && chunk_offset < size(), "Out of bounds.");
-  return is_nullable() && (*null_values_)[chunk_offset];
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 T ValueSegment<T>::get(const ChunkOffset chunk_offset) const {
-  DebugAssert(chunk_offset >= 0 && chunk_offset < size(), "Out of bounds.");
-  if (is_nullable() && (*null_values_)[chunk_offset]) {
-    throw std::logic_error("NULL value at chunk_offset.");
-  }
-  return values_[chunk_offset];
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 std::optional<T> ValueSegment<T>::get_typed_value(const ChunkOffset chunk_offset) const {
-  DebugAssert(chunk_offset >= 0 && chunk_offset < size(), "Out of bounds.");
-  if (is_nullable() && (*null_values_)[chunk_offset]) {
-    return std::nullopt;
-  }
-  return values_[chunk_offset];
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 void ValueSegment<T>::append(const AllTypeVariant& value) {
-  if (variant_is_null(value)) {
-    if (!is_nullable()) {
-      throw std::logic_error("Trying to append NULL value to non nullable segment.");
-    }
-    (*null_values_).push_back(variant_is_null(value));
-    values_.push_back(T{});
-    return;
-  }
-  try {
-    values_.push_back(type_cast<T>(value));
-  } catch (...) {
-    try {
-      values_.push_back(boost::lexical_cast<T>(value));
-    } catch (...) {
-      throw std::logic_error("Could not cast value to segment's type.");
-    }
-  }
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 ChunkOffset ValueSegment<T>::size() const {
-  return values_.size();
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 const std::vector<T>& ValueSegment<T>::values() const {
-  return values_;
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 bool ValueSegment<T>::is_nullable() const {
-  return static_cast<bool>(null_values_);
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 const std::vector<bool>& ValueSegment<T>::null_values() const {
-  if (!is_nullable()) {
-    throw std::logic_error("Segment is not nullable.");
-  }
-  return *null_values_;
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 template <typename T>
 size_t ValueSegment<T>::estimate_memory_usage() const {
-  return values_.capacity() * sizeof(T) + ((is_nullable()) ? (*null_values_).capacity() * sizeof(bool) : 0);
+  // Implementation goes here
+  Fail("Implementation is missing.");
 }
 
 // Macro to instantiate the following classes:
