@@ -15,6 +15,9 @@ ValueSegment<T>::ValueSegment(bool nullable) {
 template <typename T>
 AllTypeVariant ValueSegment<T>::operator[](const ChunkOffset chunk_offset) const {
   DebugAssert(chunk_offset < size(), "Out of bounds.");
+  if (is_nullable() && (*null_values_)[chunk_offset]) {
+    return NULL_VALUE;
+  }
   return values_.at(chunk_offset);
 }
 
@@ -54,12 +57,11 @@ void ValueSegment<T>::append(const AllTypeVariant& value) {
   }
   try {
     values_.push_back(type_cast<T>(value));
-  } catch (...) {
-    try {
-      values_.push_back(boost::lexical_cast<T>(value));
-    } catch (...) {
-      throw std::logic_error("Could not cast value to segment's type.");
+    if (is_nullable()) {
+      (*null_values_).push_back(false);
     }
+  } catch (...) {
+    throw std::logic_error("Could not cast value to segment's type.");
   }
 }
 
@@ -88,7 +90,7 @@ const std::vector<bool>& ValueSegment<T>::null_values() const {
 
 template <typename T>
 size_t ValueSegment<T>::estimate_memory_usage() const {
-  return values_.capacity() * sizeof(T) + ((is_nullable()) ? (*null_values_).capacity() * sizeof(bool) : 0);
+  return values_.capacity() * sizeof(T);
 }
 
 // Macro to instantiate the following classes:
