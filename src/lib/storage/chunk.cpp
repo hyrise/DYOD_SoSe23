@@ -32,9 +32,9 @@ void Chunk::append(const std::vector<AllTypeVariant>& values) {
     const auto no_types = types.storage_.size_;
     DebugAssert(no_types == 5, "There are 5 supported data types but a different count was found.");
 
-    if (append_with_type<int32_t>(column_it, value_it) || append_with_type<int64_t>(column_it, value_it) ||
-        append_with_type<float>(column_it, value_it) || append_with_type<double>(column_it, value_it) ||
-        append_with_type<std::string>(column_it, value_it)) {}
+    (append_with_type<int32_t>(column_it, value_it) || append_with_type<int64_t>(column_it, value_it) ||
+     append_with_type<float>(column_it, value_it) || append_with_type<double>(column_it, value_it) ||
+     append_with_type<std::string>(column_it, value_it));
 
     ++value_it;
   }
