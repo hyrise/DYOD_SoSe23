@@ -16,6 +16,13 @@ class StorageStorageManagerTest : public BaseTest {
   }
 };
 
+TEST_F(StorageStorageManagerTest, AddTable) {
+  auto& storage_manager = StorageManager::get();
+  auto table_c = std::make_shared<Table>();
+  // Table already exists 
+  EXPECT_THROW(storage_manager.add_table("first_table", table_c), std::logic_error);
+}
+
 TEST_F(StorageStorageManagerTest, GetTable) {
   auto& storage_manager = StorageManager::get();
   auto table_c = storage_manager.get_table("first_table");
@@ -44,6 +51,13 @@ TEST_F(StorageStorageManagerTest, DoesNotHaveTable) {
 TEST_F(StorageStorageManagerTest, HasTable) {
   auto& storage_manager = StorageManager::get();
   EXPECT_EQ(storage_manager.has_table("first_table"), true);
+}
+
+TEST_F(StorageStorageManagerTest, PrintTable) {
+  auto& storage_manager = StorageManager::get();
+  std::stringstream ss;
+  storage_manager.print(ss); 
+  EXPECT_TRUE(ss.str() != "");
 }
 
 }  // namespace opossum
