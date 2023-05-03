@@ -10,16 +10,14 @@ void Chunk::add_segment(const std::shared_ptr<AbstractSegment> column) {
 }
 
 template <typename T>
-bool append_with_type(
-  std::vector<std::shared_ptr<AbstractSegment>>::iterator column_it, 
-  std::vector<AllTypeVariant>::const_iterator value_it)
-{
-    auto segment = std::dynamic_pointer_cast<ValueSegment<T>>(*column_it);
-    if (segment) {
-      segment->append(*value_it);
-      return true;
-    }
-    return false;
+bool append_with_type(std::vector<std::shared_ptr<AbstractSegment>>::iterator column_it,
+                      std::vector<AllTypeVariant>::const_iterator value_it) {
+  auto segment = std::dynamic_pointer_cast<ValueSegment<T>>(*column_it);
+  if (segment) {
+    segment->append(*value_it);
+    return true;
+  }
+  return false;
 }
 
 void Chunk::append(const std::vector<AllTypeVariant>& values) {
