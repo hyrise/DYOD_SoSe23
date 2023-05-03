@@ -72,7 +72,6 @@ class Table : private Noncopyable {
   std::vector<std::string> _column_types;
   std::vector<bool> _column_nullable;
   unsigned int _target_chunk_size;
-  // Implementation goes here
 };
 
 }  // namespace opossum

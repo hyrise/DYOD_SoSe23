@@ -5,7 +5,6 @@
 namespace opossum {
 
 void Chunk::add_segment(const std::shared_ptr<AbstractSegment> segment) {
-  // Implementation goes here
   _columns.push_back(segment);
 }
 
@@ -21,12 +20,7 @@ bool append_with_type(std::vector<std::shared_ptr<AbstractSegment>>::iterator co
 }
 
 void Chunk::append(const std::vector<AllTypeVariant>& values) {
-  // Implementation goes here
   DebugAssert(values.size() == column_count(), "Cannot insert a tuple with less values than columns.");
-
-  // Problem: How to iterate over the given data types in all_type_variant?
-  const auto no_types = types.storage_.size_;
-  DebugAssert(no_types == 5, "There are 5 supported data types but a different count was found.");
 
   auto column_it = _columns.begin();
   auto value_it = values.begin();
