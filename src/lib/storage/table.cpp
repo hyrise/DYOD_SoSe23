@@ -10,15 +10,15 @@ Table::Table(const ChunkOffset target_chunk_size) {
 }
 
 void Table::add_column_definition(const std::string& name, const std::string& type, const bool nullable) {
-  DebugAssert(_column_names.size() == _column_types.size() && _column_types.size() == _column_nullable.size(), "Columns are not well defined");
-  if(std::find(_column_names.begin(), _column_names.end(), name) != _column_names.end()){
-    throw std::logic_error("It is not allowed to add two columns with the same name."); 
+  DebugAssert(_column_names.size() == _column_types.size() && _column_types.size() == _column_nullable.size(),
+              "Columns are not well defined");
+  if (std::find(_column_names.begin(), _column_names.end(), name) != _column_names.end()) {
+    throw std::logic_error("It is not allowed to add two columns with the same name.");
   }
 
   _column_names.emplace_back(name);
   _column_types.emplace_back(type);
   _column_nullable.emplace_back(nullable);
-
 }
 
 void Table::add_column(const std::string& name, const std::string& type, const bool nullable) {
@@ -32,13 +32,13 @@ void Table::add_column(const std::string& name, const std::string& type, const b
 }
 
 void Table::create_new_chunk() {
-  if(_chunks.back()->size() < _target_chunk_size){
+  if (_chunks.back()->size() < _target_chunk_size) {
     throw std::logic_error("It is not allowed to add a new chunk if the last chunk is not full yet.");
   }
 
   _chunks.emplace_back(std::make_shared<Chunk>());
 
-  size_t num_columns = _column_types.size(); 
+  size_t num_columns = _column_types.size();
   for (unsigned int col_id = 0; col_id < num_columns; ++col_id) {
     resolve_data_type(_column_types[col_id], [&](const auto data_type_t) {
       using ColumnDataType = typename decltype(data_type_t)::type;
@@ -60,7 +60,7 @@ ColumnCount Table::column_count() const {
 }
 
 uint64_t Table::row_count() const {
-  // This is based on the assumption that all but the last chunk contain exactly _target_chunk_size values. 
+  // This is based on the assumption that all but the last chunk contain exactly _target_chunk_size values.
   return (chunk_count() - 1) * _target_chunk_size + _chunks.back()->size();
 }
 
@@ -69,7 +69,7 @@ ChunkID Table::chunk_count() const {
 }
 
 ColumnID Table::column_id_by_name(const std::string& column_name) const {
-  size_t num_columns = _column_names.size(); 
+  size_t num_columns = _column_names.size();
   for (uint16_t col_id = 0; col_id < num_columns; ++col_id) {
     if (_column_names[col_id] == column_name) {
       return ColumnID{col_id};

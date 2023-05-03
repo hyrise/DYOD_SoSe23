@@ -47,11 +47,11 @@ TEST_F(StorageTableTest, RowCount) {
 }
 
 TEST_F(StorageTableTest, AddColumn) {
-  EXPECT_EQ(table.column_count(), 2); 
+  EXPECT_EQ(table.column_count(), 2);
   table.add_column("col_3", "int", true);
-  EXPECT_EQ(table.column_count(), 3); 
+  EXPECT_EQ(table.column_count(), 3);
   EXPECT_THROW(table.add_column("col_3", "int", false), std::logic_error);
-  EXPECT_EQ(table.column_count(), 3); 
+  EXPECT_EQ(table.column_count(), 3);
 }
 
 TEST_F(StorageTableTest, GetColumnName) {
@@ -91,8 +91,8 @@ TEST_F(StorageTableTest, CreateNewChunk) {
   EXPECT_EQ(table.chunk_count(), 2);
   EXPECT_THROW(table.create_new_chunk(), std::logic_error);
   table.append({4, "New Chunk is now allowed"});
-  table.create_new_chunk(); 
-  EXPECT_EQ(table.chunk_count(), 3); 
+  table.create_new_chunk();
+  EXPECT_EQ(table.chunk_count(), 3);
 }
 
 TEST_F(StorageTableTest, AppendNullValues) {

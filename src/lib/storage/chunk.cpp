@@ -32,7 +32,6 @@ void Chunk::append(const std::vector<AllTypeVariant>& values) {
   auto value_it = values.begin();
 
   for (; column_it < _columns.end(); ++column_it) {
-
     (append_with_type<int32_t>(column_it, value_it) || append_with_type<int64_t>(column_it, value_it) ||
      append_with_type<float>(column_it, value_it) || append_with_type<double>(column_it, value_it) ||
      append_with_type<std::string>(column_it, value_it));
