@@ -71,7 +71,7 @@ class Table : private Noncopyable {
   std::vector<std::string> _column_names;
   std::vector<std::string> _column_types;
   std::vector<bool> _column_nullable;
-  unsigned int _chunk_size;
+  unsigned int _target_chunk_size;
   // Implementation goes here
 };
 

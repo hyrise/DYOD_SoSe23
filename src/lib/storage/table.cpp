@@ -5,7 +5,7 @@
 namespace opossum {
 
 Table::Table(const ChunkOffset target_chunk_size) {
-  _chunk_size = target_chunk_size;
+  _target_chunk_size = target_chunk_size;
   _chunks = std::vector<std::shared_ptr<Chunk>>{std::make_shared<Chunk>()};
 }
 
@@ -38,7 +38,7 @@ void Table::create_new_chunk() {
 }
 
 void Table::append(const std::vector<AllTypeVariant>& values) {
-  if (_chunks.back()->size() == _chunk_size) {
+  if (_chunks.back()->size() == _target_chunk_size) {
     create_new_chunk();
   }
   _chunks.back()->append(values);
@@ -49,7 +49,7 @@ ColumnCount Table::column_count() const {
 }
 
 uint64_t Table::row_count() const {
-  return (_chunks.size() - 1) * _chunk_size + _chunks.back()->size();
+  return (_chunks.size() - 1) * _target_chunk_size + _chunks.back()->size();
 }
 
 ChunkID Table::chunk_count() const {
@@ -66,7 +66,7 @@ ColumnID Table::column_id_by_name(const std::string& column_name) const {
 }
 
 ChunkOffset Table::target_chunk_size() const {
-  return _chunk_size;
+  return _target_chunk_size;
 }
 
 const std::vector<std::string>& Table::column_names() const {
@@ -74,14 +74,14 @@ const std::vector<std::string>& Table::column_names() const {
 }
 
 const std::string& Table::column_name(const ColumnID column_id) const {
-  if (column_id > _column_nullable.size()) {
+  if (column_id > _column_names.size()) {
     throw std::logic_error("Table does not contain column with the requested id.");
   }
   return _column_names[column_id];
 }
 
 const std::string& Table::column_type(const ColumnID column_id) const {
-  if (column_id > _column_nullable.size()) {
+  if (column_id > _column_types.size()) {
     throw std::logic_error("Table does not contain column with the requested id.");
   }
   return _column_types[column_id];
@@ -102,6 +102,9 @@ std::shared_ptr<Chunk> Table::get_chunk(ChunkID chunk_id) {
 }
 
 std::shared_ptr<const Chunk> Table::get_chunk(ChunkID chunk_id) const {
+  if (chunk_id >= static_cast<ChunkID>(_chunks.size())) {
+    throw std::logic_error("Table does not contain chunk with the requested id.");
+  }
   return _chunks[chunk_id];
 }
 
