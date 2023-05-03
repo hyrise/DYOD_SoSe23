@@ -4,9 +4,9 @@
 
 namespace opossum {
 
-void Chunk::add_segment(const std::shared_ptr<AbstractSegment> column) {
+void Chunk::add_segment(const std::shared_ptr<AbstractSegment> segment) {
   // Implementation goes here
-  _columns.push_back(column);
+  _columns.push_back(segment);
 }
 
 template <typename T>
@@ -27,34 +27,30 @@ void Chunk::append(const std::vector<AllTypeVariant>& values) {
   auto column_it = _columns.begin();
   auto value_it = values.begin();
 
-  while (column_it != _columns.end()) {
+  for (; column_it < _columns.end(); ++column_it) {
     // Problem: How to iterate over the given data types in all_type_variant?
     const auto no_types = types.storage_.size_;
     DebugAssert(no_types == 5, "There are 5 supported data types but a different count was found.");
 
-    append_with_type<int32_t>(column_it, value_it);
-    append_with_type<int64_t>(column_it, value_it);
-    append_with_type<float>(column_it, value_it);
-    append_with_type<double>(column_it, value_it);
-    append_with_type<std::string>(column_it, value_it);
+    if (append_with_type<int32_t>(column_it, value_it) ||
+        append_with_type<int64_t>(column_it, value_it) ||
+        append_with_type<float>(column_it, value_it) ||
+        append_with_type<double>(column_it, value_it) ||
+        append_with_type<std::string>(column_it, value_it)) {}
 
-    ++column_it;
     ++value_it;
   }
 }
 
 std::shared_ptr<AbstractSegment> Chunk::get_segment(const ColumnID column_id) const {
-  // Implementation goes here
   return _columns[column_id];
 }
 
 ColumnCount Chunk::column_count() const {
-  // Implementation goes here
   return static_cast<ColumnCount>(_columns.size());
 }
 
 ChunkOffset Chunk::size() const {
-  // Implementation goes here
   if (_columns.size() == 0)
     return ChunkOffset{0};
   return static_cast<ChunkOffset>((*_columns[0]).size());
