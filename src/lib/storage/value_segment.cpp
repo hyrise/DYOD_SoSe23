@@ -57,7 +57,9 @@ void ValueSegment<T>::append(const AllTypeVariant& value) {
   }
   try {
     _values.push_back(type_cast<T>(value));
-    (*_null_values).push_back(false);
+    if (is_nullable()) {
+      (*_null_values).push_back(false);
+    }
   } catch (...) {
     throw std::logic_error("Could not cast value to segment's type.");
   }
