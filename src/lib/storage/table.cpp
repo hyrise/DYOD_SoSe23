@@ -28,7 +28,7 @@ void Table::add_column(const std::string& name, const std::string& type, const b
 void Table::create_new_chunk() {
   _chunks.emplace_back(std::make_shared<Chunk>());
 
-  for (unsigned int i = 0; i < _column_types.size(); i++) {
+  for (unsigned int i = 0; i < _column_types.size(); ++i) {
     resolve_data_type(_column_types[i], [&](const auto data_type_t) {
       using ColumnDataType = typename decltype(data_type_t)::type;
       const auto value_segment = std::make_shared<ValueSegment<ColumnDataType>>(_column_nullable[i]);
@@ -57,7 +57,7 @@ ChunkID Table::chunk_count() const {
 }
 
 ColumnID Table::column_id_by_name(const std::string& column_name) const {
-  for (unsigned int i = 0; i < _column_names.size(); i++) {
+  for (unsigned int i = 0; i < _column_names.size(); ++i) {
     if (_column_names[i] == column_name) {
       return static_cast<ColumnID>(i);
     }
