@@ -51,15 +51,13 @@ void ValueSegment<T>::append(const AllTypeVariant& value) {
     if (!is_nullable()) {
       throw std::logic_error("Trying to append NULL value to non nullable segment.");
     }
-    (*_null_values).push_back(variant_is_null(value));
+    (*_null_values).push_back(true);
     _values.push_back(T{});
     return;
   }
   try {
     _values.push_back(type_cast<T>(value));
-    if (is_nullable()) {
-      (*_null_values).push_back(false);
-    }
+    (*_null_values).push_back(false);
   } catch (...) {
     throw std::logic_error("Could not cast value to segment's type.");
   }
