@@ -24,13 +24,14 @@ void Chunk::append(const std::vector<AllTypeVariant>& values) {
   // Implementation goes here
   DebugAssert(values.size() == column_count(), "Cannot insert a tuple with less values than columns.");
 
+  // Problem: How to iterate over the given data types in all_type_variant?
+  const auto no_types = types.storage_.size_;
+  DebugAssert(no_types == 5, "There are 5 supported data types but a different count was found.");
+
   auto column_it = _columns.begin();
   auto value_it = values.begin();
 
   for (; column_it < _columns.end(); ++column_it) {
-    // Problem: How to iterate over the given data types in all_type_variant?
-    const auto no_types = types.storage_.size_;
-    DebugAssert(no_types == 5, "There are 5 supported data types but a different count was found.");
 
     (append_with_type<int32_t>(column_it, value_it) || append_with_type<int64_t>(column_it, value_it) ||
      append_with_type<float>(column_it, value_it) || append_with_type<double>(column_it, value_it) ||
