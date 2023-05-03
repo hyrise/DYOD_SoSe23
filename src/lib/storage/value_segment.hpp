@@ -45,8 +45,8 @@ class ValueSegment : public AbstractSegment {
   size_t estimate_memory_usage() const final;
 
  protected:
-  std::vector<T> values_;
-  std::optional<std::vector<bool>> null_values_;
+  std::vector<T> _values;
+  std::optional<std::vector<bool>> _null_values;
 };
 
 EXPLICITLY_DECLARE_DATA_TYPES(ValueSegment);
