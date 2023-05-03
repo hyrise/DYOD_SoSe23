@@ -81,7 +81,7 @@ TEST_F(StorageTableTest, AppendNullValues) {
   EXPECT_THROW(table.append({NULL_VALUE, "foo"}), std::logic_error);
 }
 
-TEST_F(StorageTableTest, CompressChunk){
+TEST_F(StorageTableTest, CompressChunk) {
   // Not implemented yet
   EXPECT_ANY_THROW(table.compress_chunk(ChunkID{0}));
 }

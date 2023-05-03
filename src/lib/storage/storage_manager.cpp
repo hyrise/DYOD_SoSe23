@@ -48,7 +48,7 @@ std::vector<std::string> StorageManager::table_names() const {
 void StorageManager::print(std::ostream& out) const {
   for (auto [key, value] : _tables) {
     out << key << " #columns: " << value->column_count() << " #rows: " << value->row_count() << " #chunks "
-              << value->chunk_count() << std::endl;
+        << value->chunk_count() << std::endl;
   }
 }
 
